@@ -1,0 +1,45 @@
+/* ============================ */
+/* FIX DATATABLE LAYOUT CONFLICT */
+/* ============================ */
+
+.datatable-container .dataTables_wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+/* Fix search & length input */
+.datatable-container .dataTables_filter input,
+.datatable-container .dataTables_length select {
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+    height: auto !important;
+    border: 1px solid #dadce0 !important;
+}
+
+/* Fix pagination style conflict */
+.datatable-container .dataTables_paginate .paginate_button {
+    padding: 4px 10px !important;
+    margin: 2px !important;
+    border-radius: 6px !important;
+    background: #f1f1f1 !important;
+    border: 1px solid #ddd !important;
+}
+
+.datatable-container .dataTables_paginate .paginate_button.current {
+    background: #ec407a !important; /* Material color */
+    color: white !important;
+    border: 1px solid #ec407a !important;
+}
+
+/* Prevent Material UI table styling from overriding DT */
+.datatable-container table.dataTable thead th,
+.datatable-container table.dataTable thead td {
+    background: #fafafa !important;
+    border-bottom: 1px solid #ddd !important;
+    font-weight: 600 !important;
+}
+
+/* Fix odd/even row conflict */
+.datatable-container table.dataTable tbody tr:nth-child(even) {
+    background-color: #f7f7f7 !important;
+}
