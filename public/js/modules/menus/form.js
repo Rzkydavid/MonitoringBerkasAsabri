@@ -1,11 +1,11 @@
 $(document).ready(function () {
     $("#btnBack").on("click", function () {
-        window.history.back();
+        window.location.href = `/menus`;
     });
 
     $("#btnReset").on("click", function () {
         // Clear text fields
-        $("#menuForm").find("input[type=text]").val("");
+        $("#form").find("input[type=text]").val("");
 
         // Clear menu ID (switch to create mode)
         $("#menu_id").val("");
@@ -14,7 +14,7 @@ $(document).ready(function () {
         $(".input-group-outline").removeClass("is-filled");
     });
 
-    $("#menuForm").on("submit", function (e) {
+    $("#form").on("submit", function (e) {
         e.preventDefault();
 
         let id = $("#menu_id").val();

@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $("#menuTable").DataTable({
+    $("#table").DataTable({
         processing: true,
         serverSide: true,
-        ajax: MENU_URL,
+        ajax: FETCH_URL,
         columns: [
             {
                 data: "checkbox",
@@ -84,9 +84,7 @@ $(document).ready(function () {
                                 text: res.message,
                             });
 
-                            $("#menuTable")
-                                .DataTable()
-                                .ajax.reload(null, false);
+                            $("#table").DataTable().ajax.reload(null, false);
                             $("#checkAll").prop("checked", false);
                         } else {
                             Swal.fire({
@@ -110,7 +108,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#menuTable").on("click", ".edit", function () {
+    $("#table").on("click", ".edit", function () {
         const id = $(this).data("id");
         window.location.href = `/menus/${id}/edit`;
     });

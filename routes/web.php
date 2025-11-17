@@ -13,6 +13,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
 
 // Public: Login routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -73,6 +74,42 @@ Route::middleware('auth')->group(function () {
 		->name('menus.update')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_MENU');
+
+
+	Route::get('/roles', [RoleController::class, 'index'])
+		->name('roles.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE');
+
+	Route::get('/roles/data', [RoleController::class, 'data'])
+		->name('roles.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE');
+
+	Route::get('/roles/create', [RoleController::class, 'create'])
+		->name('roles.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_ROLE');
+
+	Route::post('/roles/store', [RoleController::class, 'store'])
+		->name('roles.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_ROLE');
+
+	Route::post('/roles/bulk-delete', [RoleController::class, 'bulkDelete'])
+		->name('roles.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_ROLE');
+
+	Route::get('/roles/{encoded}/edit', [RoleController::class, 'edit'])
+		->name('roles.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_ROLE');
+
+	Route::put('/roles/{encoded}/update', [RoleController::class, 'update'])
+		->name('roles.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_ROLE');
 
 	Route::get('/role-menu', [MenuController::class, 'index'])
 		->name('role-menu.index')

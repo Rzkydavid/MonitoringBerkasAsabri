@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Menu;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 
-class MenuController extends Controller
+class RoleController extends Controller
 {
     public function index()
     {
-        return view('menus.index');
+        return view('roles.index');
     }
 
     public function data(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Menu::query())
+            return DataTables::of(Role::query())
                 ->addIndexColumn()
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox table-checkbox" value="' . $row->id . '">';
                 })
                 ->addColumn('action', function ($row) {
                     $encodedId = base64_encode($row->id);
-                    $url = route('menus.edit', $encodedId);
+                    $url = route('roles.edit', $encodedId);
 
                     return '
                         <a href="' . $url . '" class="btn btn-sm btn-warning
@@ -52,7 +52,7 @@ class MenuController extends Controller
 
         try {
             DB::transaction(function () use ($ids) {
-                Menu::whereIn('id', $ids)->delete();
+                Role::whereIn('id', $ids)->delete();
             });
 
             return response()->json([
@@ -70,8 +70,8 @@ class MenuController extends Controller
 
     public function create()
     {
-        return view('menus.form', [
-            'menu' => null,  // add form
+        return view('roles.form', [
+            'Role' => null,  // add form
         ]);
     }
 
@@ -79,45 +79,43 @@ class MenuController extends Controller
     {
         $request->validate([
             'name'      => 'required|max:255',
-            'route'     => 'required|max:255',
         ]);
 
-        Menu::create($request->all());
+        Role::create($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Menu created successfully'
+            'message' => 'Role created successfully'
         ]);
     }
 
     public function edit($encoded)
     {
         $id = base64_decode($encoded);
-        $menu = Menu::findOrFail($id);
-        return view('menus.form', compact('menu'));
+        $role = Role::findOrFail($id);
+        return view('roles.form', compact('role'));
     }
 
     public function update(Request $request, $encoded)
     {
         $request->validate([
             'name' => 'required',
-            'route' => 'required',
         ]);
 
         $id = base64_decode($encoded);
-        $menu = Menu::findOrFail($id);
+        $role = Role::findOrFail($id);
 
-        $menu->update($request->all());
+        $role->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Menu updated successfully'
+            'message' => 'Role updated successfully'
         ]);
     }
 
-    public function destroy(Menu $menu)
+    public function destroy(Role $role)
     {
-        $menu->delete();
-        return back()->with('success', 'Menu deleted');
+        $role->delete();
+        return back()->with('success', 'Role deleted');
     }
 }

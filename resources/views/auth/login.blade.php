@@ -85,9 +85,9 @@
 
     @push('js')
         <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
-        <script src="{{ asset('js/login.js') }}"></script>
+        <script src="{{ asset('js/modules/login.js') }}"></script>
         <script>
-            $(function () {
+            $(function() {
 
                 var text_val = $(".input-group input").val();
                 if (text_val === "") {

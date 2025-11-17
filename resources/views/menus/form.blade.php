@@ -22,10 +22,10 @@
                         <div class="card-body pb-2">
                             <div class="mb-2">
                                 <button id="btnBack" class="btn btn-sm btn-outline-primary">
-                                    <i class="material-icons">chevron_left</i> Back
+                                    <i class="material-icons fs-5">chevron_left</i> Back
                                 </button>
                             </div>
-                            <form id="menuForm">
+                            <form id="form">
 
                                 {{-- hidden id field for edit mode --}}
                                 <input type="hidden" name="id" id="menu_id"
@@ -105,7 +105,7 @@
             const CSRF_TOKEN = "{{ csrf_token() }}";
         </script>
 
-        <script src="{{ asset('js/menu-form.js') }}"></script>
+        <script src="{{ asset('js/modules/menus/form.js') }}"></script>
     @endpush
 
 </x-layout>

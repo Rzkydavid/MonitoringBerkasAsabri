@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-    <x-navbars.sidebar activePage="menus.index"></x-navbars.sidebar>
+    <x-navbars.sidebar activePage="roles.index"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Menus"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Roles"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -12,11 +12,11 @@
                             <div
                                 class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center">
 
-                                <h6 class="text-white text-capitalize ps-3 mb-0">Menu table</h6>
+                                <h6 class="text-white text-capitalize ps-3 mb-0">Role table</h6>
 
                                 <div class="d-flex align-items-center me-3" style="gap: 8px;">
-                                    <a href="{{ route('menus.create') }}" class="btn btn-sm btn-light text-primary">
-                                        + Add Menu
+                                    <a href="{{ route('roles.create') }}" class="btn btn-sm btn-light text-primary">
+                                        + Add Role
                                     </a>
 
                                     <button id="deleteSelected" class="btn btn-sm text-white"
@@ -41,8 +41,6 @@
                                             </th>
                                             <th>No</th>
                                             <th>Name</th>
-                                            <th>Route</th>
-                                            <th>Icon</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -59,11 +57,11 @@
 
     @push('js')
         <script>
-            const FETCH_URL = "{{ route('menus.data') }}";
-            const DELETE_URL = "{{ route('menus.bulk-delete') }}";
+            const FETCH_URL = "{{ route('roles.data') }}";
+            const DELETE_URL = "{{ route('roles.bulk-delete') }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
         </script>
-        <script src="{{ asset('js/modules/menus/index.js') }}"></script>
+        <script src="{{ asset('js/modules/roles/index.js') }}"></script>
     @endpush
 
 </x-layout>
