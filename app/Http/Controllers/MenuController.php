@@ -1,71 +1,118 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Models\ViewMenu;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
     public function index()
     {
-        return view('menu.index');
+        return view('menus.index');
     }
 
     public function data(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(ViewMenu::query())
+            return DataTables::of(Menu::query())
                 ->addIndexColumn()
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="row-checkbox table-checkbox" value="' . $row->id . '">';
+                })
                 ->addColumn('action', function ($row) {
+                    $encodedId = base64_encode($row->id);
+                    $url = route('menus.edit', $encodedId);
+
                     return '
-                        <button class="btn btn-sm btn-primary edit" data-id="'.$row->id.'">Edit</button>
-                        <button class="btn btn-sm btn-danger delete" data-id="'.$row->id.'">Delete</button>
+                        <a href="' . $url . '" class="btn btn-sm btn-warning
+                            data-bs-toggle="tooltip"
+                            title="Edit"">
+                            <i class="material-icons">edit</i> Edit
+                        </a>
                     ';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['checkbox', 'action'])
                 ->make(true);
         }
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+
+        if (!is_array($ids) || count($ids) === 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No items selected.',
+            ], 400);
+        }
+
+        try {
+            DB::transaction(function () use ($ids) {
+                Menu::whereIn('id', $ids)->delete();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => count($ids) . ' item(s) deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delete failed: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
     public function create()
     {
-        $parents = Menu::orderBy('order')->get();
-        return view('menus.create', compact('parents'));
+        return view('menus.form', [
+            'menu' => null,  // add form
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'route' => 'required',
-            'order' => 'numeric',
+            'name'      => 'required|max:255',
+            'route'     => 'required|max:255',
         ]);
 
         Menu::create($request->all());
 
-        return redirect()->route('menu.index')->with('success', 'Menu created');
+        return response()->json([
+            'success' => true,
+            'message' => 'Menu created successfully'
+        ]);
     }
 
-    public function edit(Menu $menu)
+    public function edit($encoded)
     {
-        $parents = Menu::where('id', '!=', $menu->id)->get();
-        return view('menus.edit', compact('menu', 'parents'));
+        $id = base64_decode($encoded);
+        $menu = Menu::findOrFail($id);
+        return view('menus.form', compact('menu'));
     }
 
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, $encoded)
     {
         $request->validate([
             'name' => 'required',
             'route' => 'required',
-            'order' => 'numeric',
         ]);
+
+        $id = base64_decode($encoded);
+        $menu = Menu::findOrFail($id);
 
         $menu->update($request->all());
 
-        return redirect()->route('menu.index')->with('success', 'Menu updated');
+        return response()->json([
+            'success' => true,
+            'message' => 'Menu updated successfully'
+        ]);
     }
 
     public function destroy(Menu $menu)

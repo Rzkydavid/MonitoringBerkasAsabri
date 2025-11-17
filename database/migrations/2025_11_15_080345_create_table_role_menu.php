@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->foreignId('menu_id')->constrained()->onDelete('cascade');
+            $table->foreignId('parent_menu_id')->nullable()->constrained('menus')->onDelete('set null');
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

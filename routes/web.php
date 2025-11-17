@@ -26,21 +26,6 @@ Route::get('/debug/populate-privileges', [PrivilegeController::class, 'populate'
 // Protected routes: dashboard/home and any other pages
 Route::middleware('auth')->group(function () {
 
-	Route::get('/', [DashboardController::class, 'index'])
-		->name('dashboard')
-		->middleware(['auth', 'privilege'])
-		->defaults('privilege', 'VIEW_DASHBOARD');
-
-	Route::get('/menu', [MenuController::class, 'index'])
-		->name('menu.index')
-		->middleware(['auth', 'privilege'])
-		->defaults('privilege', 'VIEW_MENU');
-
-	Route::get('/menu/data', [MenuController::class, 'data'])
-		->name('menu.data')
-		->middleware(['auth', 'privilege'])
-		->defaults('privilege', 'VIEW_MENU');
-
 	Route::get('/privileges', [PrivilegeController::class, 'index'])
 		->middleware('auth', 'privilege')
 		->name('privileges.index');
@@ -48,6 +33,51 @@ Route::middleware('auth')->group(function () {
 	Route::get('/unauthorized', function () {
 		return view('errors.unauthorized');
 	})->name('unauthorized');
+
+	Route::get('/', [DashboardController::class, 'index'])
+		->name('dashboard')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_DASHBOARD');
+
+	Route::get('/menus', [MenuController::class, 'index'])
+		->name('menus.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_MENU');
+
+	Route::get('/menus/data', [MenuController::class, 'data'])
+		->name('menus.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_MENU');
+
+	Route::get('/menus/create', [MenuController::class, 'create'])
+		->name('menus.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_MENU');
+
+	Route::post('/menus/store', [MenuController::class, 'store'])
+		->name('menus.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_MENU');
+
+	Route::post('/menus/bulk-delete', [MenuController::class, 'bulkDelete'])
+		->name('menus.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_MENU');
+
+	Route::get('/menus/{encoded}/edit', [MenuController::class, 'edit'])
+		->name('menus.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_MENU');
+
+	Route::put('/menus/{encoded}/update', [MenuController::class, 'update'])
+		->name('menus.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_MENU');
+
+	Route::get('/role-menu', [MenuController::class, 'index'])
+		->name('role-menu.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE_MENU');
 
 
 

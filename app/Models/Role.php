@@ -28,7 +28,8 @@ class Role extends Model
 
     public function menus()
     {
-        return $this->belongsToMany(Menu::class, 'role_menu');
+        return $this->belongsToMany(Menu::class, 'role_menu')
+            ->withPivot(['parent_menu_id', 'order'])
+            ->orderBy('pivot_order');
     }
-
 }

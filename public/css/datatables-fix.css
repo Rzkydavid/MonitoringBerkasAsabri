@@ -43,3 +43,37 @@
 .datatable-container table.dataTable tbody tr:nth-child(even) {
     background-color: #f7f7f7 !important;
 }
+
+/* Resize checkbox */
+.table-checkbox {
+    transform: scale(1.4);
+    cursor: pointer;
+}
+
+/* Center column + fix alignment */
+table.dataTable th:first-child,
+table.dataTable td:first-child {
+    text-align: center !important;
+    vertical-align: middle !important;
+    width: 40px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+}
+
+.table th {
+    vertical-align: middle !important;
+}
+
+.dataTable tbody td {
+    vertical-align: middle !important;
+}
+
+.dataTable tbody th {
+    vertical-align: middle !important;
+}
+
+

@@ -10,13 +10,10 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name');          // Display name
-            $table->string('route');         // Route name
-            $table->unsignedBigInteger('parent_id')->nullable(); 
-            $table->integer('order')->default(0);
+            $table->string('name');
+            $table->string('route')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
-
-            $table->foreign('parent_id')->references('id')->on('menus')->onDelete('cascade');
         });
     }
 
