@@ -43,6 +43,7 @@
                                             <th>Name</th>
                                             <th>Route</th>
                                             <th>Icon</th>
+                                            <th>Icon</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -62,8 +63,47 @@
             const FETCH_URL = "{{ route('menus.data') }}";
             const DELETE_URL = "{{ route('menus.bulk-delete') }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
+            const RESOURCE_NAME = "menus";
+            const TABLE_COLUMNS = [{
+                    data: 'checkbox',
+                    name: 'checkbox',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'route',
+                    name: 'route'
+                },
+                {
+                    data: 'icon',
+                    name: 'icon'
+                },
+                {
+                    data: 'icon_html',
+                    name: 'icon_html',
+                    orderable: false,
+                    searchable: false
+                },
+
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ];
         </script>
-        <script src="{{ asset('js/modules/menus/index.js') }}"></script>
+        <script src="{{ asset('js/modules/table.js') }}"></script>
     @endpush
 
 </x-layout>

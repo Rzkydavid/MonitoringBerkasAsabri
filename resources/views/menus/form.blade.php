@@ -28,7 +28,7 @@
                             <form id="form">
 
                                 {{-- hidden id field for edit mode --}}
-                                <input type="hidden" name="id" id="menu_id"
+                                <input type="hidden" name="id" id="id"
                                     value="{{ isset($menu) ? $menu->id : '' }}">
 
                                 <div class="row">
@@ -100,12 +100,14 @@
 
     @push('js')
         <script>
+            const BACK_URL = `/menus`;
+            const RESOURCE_NAME = `Menu`;
             const STORE_URL = "{{ route('menus.store') }}";
             const UPDATE_URL = "{{ isset($menu) ? route('menus.update', base64_encode($menu->id)) : '' }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
         </script>
 
-        <script src="{{ asset('js/modules/menus/form.js') }}"></script>
+        <script src="{{ asset('js/modules/form.js') }}"></script>
     @endpush
 
 </x-layout>

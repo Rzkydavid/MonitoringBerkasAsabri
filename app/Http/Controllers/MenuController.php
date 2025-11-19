@@ -22,6 +22,9 @@ class MenuController extends Controller
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox table-checkbox" value="' . $row->id . '">';
                 })
+                ->addColumn('icon_html', function ($row) {
+                    return '<i class="' . $row->icon . '"></i>';
+                })
                 ->addColumn('action', function ($row) {
                     $encodedId = base64_encode($row->id);
                     $url = route('menus.edit', $encodedId);
@@ -34,7 +37,7 @@ class MenuController extends Controller
                         </a>
                     ';
                 })
-                ->rawColumns(['checkbox', 'action'])
+                ->rawColumns(['checkbox', 'icon_html', 'action'])
                 ->make(true);
         }
     }

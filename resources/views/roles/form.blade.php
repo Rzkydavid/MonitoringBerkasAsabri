@@ -28,7 +28,7 @@
                             <form id="form">
 
                                 {{-- hidden id field for edit mode --}}
-                                <input type="hidden" name="id" id="role_id"
+                                <input type="hidden" name="id" id="id"
                                     value="{{ isset($role) ? $role->id : '' }}">
 
                                 <div class="row">
@@ -65,12 +65,14 @@
 
     @push('js')
         <script>
+            const BACK_URL = `/roles`;
+            const RESOURCE_NAME = `Role`;
             const STORE_URL = "{{ route('roles.store') }}";
             const UPDATE_URL = "{{ isset($role) ? route('roles.update', base64_encode($role->id)) : '' }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
         </script>
 
-        <script src="{{ asset('js/modules/roles/form.js') }}"></script>
+        <script src="{{ asset('js/modules/form.js') }}"></script>
     @endpush
 
 </x-layout>

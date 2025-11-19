@@ -3,29 +3,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: FETCH_URL,
-        columns: [
-            {
-                data: "checkbox",
-                name: "checkbox",
-                orderable: false,
-                searchable: false,
-            },
-            {
-                data: "DT_RowIndex",
-                name: "DT_RowIndex",
-                orderable: false,
-                searchable: false,
-            },
-            { data: "name", name: "name" },
-            { data: "route", name: "route" },
-            { data: "icon", name: "icon" },
-            {
-                data: "action",
-                name: "action",
-                orderable: false,
-                searchable: false,
-            },
-        ],
+        columns: TABLE_COLUMNS,
     });
 
     $(document).on("change", "#checkAll", function () {
@@ -110,6 +88,6 @@ $(document).ready(function () {
 
     $("#table").on("click", ".edit", function () {
         const id = $(this).data("id");
-        window.location.href = `/menus/${id}/edit`;
+        window.location.href = `/${RESOURCE_NAME}/${id}/edit`;
     });
 });

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $("#btnBack").on("click", function () {
-        window.location.href = `/menus`;
+        window.location.href = BACK_URL;
     });
 
     $("#btnReset").on("click", function () {
@@ -8,7 +8,7 @@ $(document).ready(function () {
         $("#form").find("input[type=text]").val("");
 
         // Clear menu ID (switch to create mode)
-        $("#menu_id").val("");
+        $("#id").val("");
 
         // Reset floating labels
         $(".input-group-outline").removeClass("is-filled");
@@ -17,7 +17,7 @@ $(document).ready(function () {
     $("#form").on("submit", function (e) {
         e.preventDefault();
 
-        let id = $("#menu_id").val();
+        let id = $("#id").val();
         let url = id ? UPDATE_URL : STORE_URL;
 
         // SHOW LOADING
@@ -37,9 +37,9 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: res.message || "Menu saved successfully!",
+                    text: res.message || `${RESOURCE_name} saved successfully!`,
                 }).then(() => {
-                    window.location.href = "/menus";
+                    window.location.href = BACK_URL;
                 });
             },
             error: function (err) {

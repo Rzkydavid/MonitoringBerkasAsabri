@@ -60,8 +60,28 @@
             const FETCH_URL = "{{ route('roles.data') }}";
             const DELETE_URL = "{{ route('roles.bulk-delete') }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
+            const RESOURCE_NAME = "roles";
+            const TABLE_COLUMNS = [{
+                    data: 'checkbox',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ];
         </script>
-        <script src="{{ asset('js/modules/roles/index.js') }}"></script>
+        <script src="{{ asset('js/modules/table.js') }}"></script>
     @endpush
 
 </x-layout>

@@ -30,10 +30,10 @@
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute start-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
-                <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
-                    <img src="{{ asset('assets') }}/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo">
-                    <span class="ms-1 font-weight-bold text-white">Material Dashboard 2 Laravel</span>
-                </a>
+            <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
+                <img src="{{ asset('assets') }}/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo">
+                <span class="ms-1 font-weight-bold text-white">Material Dashboard 2 Laravel</span>
+            </a>
         </div>
         <hr class="horizontal light mt-0 mb-2">
         <div class="collapse navbar-collapse px-0 w-auto  max-height-vh-100" id="sidenav-collapse-main">
@@ -115,8 +115,8 @@
         <div class="sidenav-footer position-absolute w-100 bottom-0 ">
             <div class="mx-3">
                 <a class="btn bg-gradient-primary mt-4 w-100"
-                    href="https://www.creative-tim.com/product/material-dashboard-pro-laravel"
-                    type="button">Upgrade to pro</a>
+                    href="https://www.creative-tim.com/product/material-dashboard-pro-laravel" type="button">Upgrade to
+                    pro</a>
             </div>
         </div>
     </aside>
@@ -148,7 +148,8 @@
                             <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
                                 <span class="d-sm-inline d-none"
-                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();">يسجل دخول</span>
+                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();">يسجل
+                                    دخول</span>
                             </a>
                         </li>
                         <li class="nav-item d-xl-none pe-3 d-flex align-items-center">
@@ -213,11 +214,12 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="avatar avatar-sm bg-gradient-secondary  ms-3  my-auto">
-                                                <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1"
-                                                    xmlns="http://www.w3.org/2000/svg"
+                                                <svg width="12px" height="12px" viewBox="0 0 43 36"
+                                                    version="1.1" xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink">
                                                     <title>credit-card</title>
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
                                                         <g transform="translate(-2169.000000, -745.000000)"
                                                             fill="#FFFFFF" fill-rule="nonzero">
                                                             <g transform="translate(1716.000000, 291.000000)">
@@ -707,7 +709,8 @@
                                                             class="avatar avatar-sm ms-3">
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">إعادة تصميم متجر جديد على الإنترنت</h6>
+                                                        <h6 class="mb-0 text-sm">إعادة تصميم متجر جديد على الإنترنت
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </td>
@@ -830,12 +833,13 @@
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
                             <div class="copyright text-center text-sm text-muted text-lg-end">
-                                © <script>
+                                ©
+                                <script>
                                     document.write(new Date().getFullYear())
-
                                 </script>,
                                 made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative
+                                <a href="https://www.creative-tim.com" class="font-weight-bold"
+                                    target="_blank">Creative
                                     Tim & UPDIVISION</a>
                                 for a better web.
                             </div>
@@ -1205,7 +1209,6 @@
                 },
             },
         });
-
     </script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
@@ -1215,10 +1218,9 @@
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
-
     </script>
     <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    {{-- <script async defer src="https://buttons.github.io/buttons.js"></script> --}}
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script>
 </body>
