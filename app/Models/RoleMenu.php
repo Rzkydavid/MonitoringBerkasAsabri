@@ -17,12 +17,12 @@ class RoleMenu extends Model
 
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function menu()
     {
-        return $this->belongsTo(Menu::class);
+        return $this->belongsTo(Menu::class, 'menu_id');
     }
 
     public function parentMenu()

@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-    <x-navbars.sidebar activePage="roles-privileges.index"></x-navbars.sidebar>
+    <x-navbars.sidebar activePage="roles-menus.index"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Roles Privileges"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Roles Menus"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -12,11 +12,13 @@
                             <div
                                 class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center">
 
-                                <h6 class="text-white text-capitalize ps-3 mb-0">Role Privilege table</h6>
+                                <h6 class="text-white text-capitalize ps-3 mb-0">Role Menu table</h6>
 
                                 <div class="d-flex align-items-center me-3" style="gap: 8px;">
-                                    <button class="btn btn-light text-primary" id="openAddPrivilegeModal">+ Add
-                                        Privileges</button>
+                                    <a href="{{ route('roles-menus.create') }}"
+                                        class="btn btn-sm btn-light text-primary">
+                                        + Add Role Menu
+                                    </a>
 
                                     <button id="deleteSelected" class="btn btn-sm text-white"
                                         style="background-color:#e53935;">
@@ -51,7 +53,10 @@
                                                 <input type="checkbox" id="checkAll" class="table-checkbox" />
                                             </th>
                                             <th>No</th>
-                                            <th>Privilege</th>
+                                            <th>Menu</th>
+                                            <th>Parent Menu</th>
+                                            <th>Order</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -67,10 +72,10 @@
 
     @push('js')
         <script>
-            const FETCH_URL = "{{ route('roles-privileges.data') }}";
-            const DELETE_URL = "{{ route('roles-privileges.bulk-delete') }}";
+            const FETCH_URL = "{{ route('roles-menus.data') }}";
+            const DELETE_URL = "{{ route('roles-menus.bulk-delete') }}";
             const CSRF_TOKEN = "{{ csrf_token() }}";
-            const RESOURCE_NAME = "roles-privileges";
+            const RESOURCE_NAME = "roles-menus";
             const TABLE_COLUMNS = [{
                     data: 'checkbox',
                     name: 'checkbox',
@@ -84,53 +89,26 @@
                     searchable: false
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'menu_name',
+                    name: 'menu_name'
+                },
+                {
+                    data: 'parent_menu_name',
+                    name: 'parent_menu_name'
+                },
+                {
+                    data: 'order',
+                    name: 'order'
+                },
+                {
+                    data: 'action',
+                    orderable: false,
+                    searchable: false
                 },
             ];
-            const AVAILABLE_PRIVILEGES_URL = "{{ route('privileges.available') }}";
-            const ADD_ROLE_PRIVILEGES_URL = "{{ route('roles-privileges.assign') }}";
         </script>
         <script src="{{ asset('js/modules/table.js') }}"></script>
-        <script src="{{ asset('js/modules/role-privilege.js') }}"></script>
+        <script src="{{ asset('js/modules/roles-menus.js') }}"></script>
     @endpush
 
 </x-layout>
-
-<!-- Modal -->
-<div class="modal fade" id="addPrivilegeModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Available Privileges</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="d-flex justify-content-end mb-3">
-                    <button class="btn btn-primary" id="applyPrivilegesBtn">
-                        Add Selected Privileges
-                    </button>
-                </div>
-
-                <table id="availablePrivilegesTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="selectAllAvail" class="table-checkbox"></th>
-                            <th>No</th>
-                            <th>Privilege</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>

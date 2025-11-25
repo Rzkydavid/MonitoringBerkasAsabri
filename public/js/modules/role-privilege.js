@@ -18,11 +18,6 @@ $(function () {
         }
     });
 
-    $("#openModal").on("click", function () {
-        let myModal = new bootstrap.Modal(document.getElementById("myModal"));
-        myModal.show();
-    });
-
     $(function () {
         let modalTable = null;
 

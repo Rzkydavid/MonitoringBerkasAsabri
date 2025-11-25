@@ -15,6 +15,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePrivilegeController;
+use App\Http\Controllers\RoleMenuController;
+
 
 // Public: Login routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -108,11 +110,6 @@ Route::middleware('auth')->group(function () {
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_ROLE');
 
-	Route::get('/role-menu', [MenuController::class, 'index'])
-		->name('role-menu.index')
-		->middleware(['auth', 'privilege'])
-		->defaults('privilege', 'VIEW_ROLE_MENU');
-
 	Route::get('/privileges', [PrivilegeController::class, 'index'])
 		->name('privileges.index')
 		->middleware('auth', 'privilege')
@@ -152,6 +149,41 @@ Route::middleware('auth')->group(function () {
 		->name('roles-privileges.bulk-delete')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'DELETE_ROLE_PRIVILEGE');
+
+	Route::get('/roles-menus', [RoleMenuController::class, 'index'])
+		->name('roles-menus.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE_MENU');
+
+	Route::get('/roles-menus/data', [RoleMenuController::class, 'data'])
+		->name('roles-menus.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE_MENU');
+
+	Route::get('/roles-menus/create', [RoleMenuController::class, 'create'])
+		->name('roles-menus.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_ROLE_MENU');
+
+	Route::post('/roles-menus/store', [RoleMenuController::class, 'store'])
+		->name('roles-menus.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_ROLE_MENU');
+
+	Route::post('/roles-menus/bulk-delete', [RoleMenuController::class, 'bulkDelete'])
+		->name('roles-menus.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_ROLE_MENU');
+
+	Route::get('/roles-menus/{encoded}/edit', [RoleMenuController::class, 'edit'])
+		->name('roles-menus.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_ROLE_MENU');
+
+	Route::put('/roles-menus/{encoded}/update', [RoleMenuController::class, 'update'])
+		->name('roles-menus.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_ROLE_MENU');
 
 
 
