@@ -12,12 +12,9 @@ return new class extends Migration {
     {
         Schema::create('privileges', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Example: manage_users, view_reports, edit_post
-            $table->string('description')->nullable(); // Optional
-            $table->boolean('status')->default(true);
+            $table->string('name');
             $table->timestamps();
         });
-
     }
 
     /**

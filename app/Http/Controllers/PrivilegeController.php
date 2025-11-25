@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Privilege;
+use App\Models\RolePrivilege;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\Facades\DataTables;
 
 class PrivilegeController extends Controller
 {
     public function index()
     {
-        // Load all privileges
-        $privileges = Privilege::all();
+        return view('privileges.index');
+    }
 
-        // Return a view and pass the privileges
-        return view('privileges.index', compact('privileges'));
+    public function data(Request $request)
+    {
+        if ($request->ajax()) {
+            return DataTables::of(Privilege::query())
+                ->addIndexColumn()
+                ->make(true);
+        }
     }
 
     public function populate()
@@ -35,5 +42,33 @@ class PrivilegeController extends Controller
         }
 
         return 'Privileges repopulated successfully!';
+    }
+
+    public function available(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $roleId = $request->role_id;
+
+            if (!$roleId) {
+                return DataTables::of(collect([]))->make(true);
+            }
+
+            // Get privileges already assigned
+            $assigned = RolePrivilege::where('role_id', $roleId)
+                ->pluck('privilege_name')
+                ->toArray();
+
+            // Get unassigned privileges
+            $query = Privilege::whereNotIn('name', $assigned);
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="avail-checkbox table-checkbox" value="' . $row->name . '">';
+                })
+                ->rawColumns(['checkbox'])
+                ->make(true);
+        }
     }
 }

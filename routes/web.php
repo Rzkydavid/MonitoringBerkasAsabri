@@ -14,6 +14,7 @@ use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePrivilegeController;
 
 // Public: Login routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -26,10 +27,6 @@ Route::get('/debug/populate-privileges', [PrivilegeController::class, 'populate'
 
 // Protected routes: dashboard/home and any other pages
 Route::middleware('auth')->group(function () {
-
-	Route::get('/privileges', [PrivilegeController::class, 'index'])
-		->middleware('auth', 'privilege')
-		->name('privileges.index');
 
 	Route::get('/unauthorized', function () {
 		return view('errors.unauthorized');
@@ -115,6 +112,46 @@ Route::middleware('auth')->group(function () {
 		->name('role-menu.index')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'VIEW_ROLE_MENU');
+
+	Route::get('/privileges', [PrivilegeController::class, 'index'])
+		->name('privileges.index')
+		->middleware('auth', 'privilege')
+		->defaults('privilege', 'VIEW_PRIVILEGE');
+
+	Route::get('/privileges/data', [PrivilegeController::class, 'data'])
+		->name('privileges.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_PRIVILEGE');
+
+	Route::get('/privileges/populate', [PrivilegeController::class, 'populate'])
+		->name('privileges.populate')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'POPULATE_PRIVILEGE');
+
+	Route::get('/privileges/available', [PrivilegeController::class, 'available'])
+		->name('privileges.available')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_AVAILABLE_PRIVILEGE');
+
+	Route::get('/roles-privileges', [RolePrivilegeController::class, 'index'])
+		->name('roles-privileges.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE_PRIVILEGE');
+
+	Route::get('/roles-privileges/data', [RolePrivilegeController::class, 'data'])
+		->name('roles-privileges.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_ROLE_PRIVILEGE');
+
+	Route::post('/roles-privileges/assign', [RolePrivilegeController::class, 'assign'])
+		->name('roles-privileges.assign')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'ASSIGN_ROLE_PRIVILEGE');
+
+	Route::post('/roles-privileges/bulk-delete', [RolePrivilegeController::class, 'bulkDelete'])
+		->name('roles-privileges.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_ROLE_PRIVILEGE');
 
 
 

@@ -1,10 +1,31 @@
 $(document).ready(function () {
-    $("#table").DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: FETCH_URL,
-        columns: TABLE_COLUMNS,
-    });
+    // $("#table").DataTable({
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: FETCH_URL,
+    //     columns: TABLE_COLUMNS,
+    // });
+
+    function loadTable(extraParams = {}) {
+        $("#table").DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: FETCH_URL,
+                data: extraParams,
+            },
+            columns: TABLE_COLUMNS,
+        });
+    }
+
+    // Initial load with no params → empty table for this page
+    loadTable();
+
+    // allow calling from Blade
+    window.reloadTableWithParams = function (params) {
+        loadTable(params);
+    };
 
     $(document).on("change", "#checkAll", function () {
         $(".row-checkbox").prop("checked", $(this).is(":checked"));
