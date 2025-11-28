@@ -2,10 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PrivilegeController;
 use App\Http\Controllers\ProfileController;
@@ -16,6 +12,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePrivilegeController;
 use App\Http\Controllers\RoleMenuController;
+use App\Http\Controllers\StatusBerkasController;
 
 
 // Public: Login routes
@@ -184,6 +181,41 @@ Route::middleware('auth')->group(function () {
 		->name('roles-menus.update')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_ROLE_MENU');
+
+	Route::get('/status-berkas', [StatusBerkasController::class, 'index'])
+		->name('status-berkas.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_STATUS_BERKAS');
+
+	Route::get('/status-berkas/data', [StatusBerkasController::class, 'data'])
+		->name('status-berkas.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_STATUS_BERKAS');
+
+	Route::get('/status-berkas/create', [StatusBerkasController::class, 'create'])
+		->name('status-berkas.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_STATUS_BERKAS');
+
+	Route::post('/status-berkas/store', [StatusBerkasController::class, 'store'])
+		->name('status-berkas.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_STATUS_BERKAS');
+
+	Route::post('/status-berkas/bulk-delete', [StatusBerkasController::class, 'bulkDelete'])
+		->name('status-berkas.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_STATUS_BERKAS');
+
+	Route::get('/status-berkas/{encoded}/edit', [StatusBerkasController::class, 'edit'])
+		->name('status-berkas.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_STATUS_BERKAS');
+
+	Route::put('/status-berkas/{encoded}/update', [StatusBerkasController::class, 'update'])
+		->name('status-berkas.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_STATUS_BERKAS');
 
 
 
