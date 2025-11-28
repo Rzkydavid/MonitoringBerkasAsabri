@@ -13,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePrivilegeController;
 use App\Http\Controllers\RoleMenuController;
 use App\Http\Controllers\StatusBerkasController;
+use App\Http\Controllers\JenisKlaimController;
 
 
 // Public: Login routes
@@ -216,6 +217,41 @@ Route::middleware('auth')->group(function () {
 		->name('status-berkas.update')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_STATUS_BERKAS');
+
+	Route::get('/jenis-klaim', [JenisKlaimController::class, 'index'])
+		->name('jenis-klaim.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_JENIS_KLAIM');
+
+	Route::get('/jenis-klaim/data', [JenisKlaimController::class, 'data'])
+		->name('jenis-klaim.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_JENIS_KLAIM');
+
+	Route::get('/jenis-klaim/create', [JenisKlaimController::class, 'create'])
+		->name('jenis-klaim.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_JENIS_KLAIM');
+
+	Route::post('/jenis-klaim/store', [JenisKlaimController::class, 'store'])
+		->name('jenis-klaim.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_JENIS_KLAIM');
+
+	Route::post('/jenis-klaim/bulk-delete', [JenisKlaimController::class, 'bulkDelete'])
+		->name('jenis-klaim.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_JENIS_KLAIM');
+
+	Route::get('/jenis-klaim/{encoded}/edit', [JenisKlaimController::class, 'edit'])
+		->name('jenis-klaim.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_JENIS_KLAIM');
+
+	Route::put('/jenis-klaim/{encoded}/update', [JenisKlaimController::class, 'update'])
+		->name('jenis-klaim.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_JENIS_KLAIM');
 
 
 
