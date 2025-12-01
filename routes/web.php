@@ -14,6 +14,7 @@ use App\Http\Controllers\RolePrivilegeController;
 use App\Http\Controllers\RoleMenuController;
 use App\Http\Controllers\StatusBerkasController;
 use App\Http\Controllers\JenisKlaimController;
+use App\Http\Controllers\UserController;
 
 
 // Public: Login routes
@@ -252,6 +253,41 @@ Route::middleware('auth')->group(function () {
 		->name('jenis-klaim.update')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_JENIS_KLAIM');
+
+	Route::get('/users', [UserController::class, 'index'])
+		->name('users.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_USER');
+
+	Route::get('/users/data', [UserController::class, 'data'])
+		->name('users.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_USER');
+
+	Route::get('/users/create', [UserController::class, 'create'])
+		->name('users.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_USER');
+
+	Route::post('/users/store', [UserController::class, 'store'])
+		->name('users.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_USER');
+
+	Route::post('/users/bulk-delete', [UserController::class, 'bulkDelete'])
+		->name('users.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_USER');
+
+	Route::get('/users/{encoded}/edit', [UserController::class, 'edit'])
+		->name('users.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_USER');
+
+	Route::put('/users/{encoded}/update', [UserController::class, 'update'])
+		->name('users.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_USER');
 
 
 

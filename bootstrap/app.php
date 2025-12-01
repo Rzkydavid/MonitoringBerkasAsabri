@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'privilege' => \App\Http\Middleware\CheckPrivilege::class,
+            'trim_input' => \App\Http\Middleware\TrimInput::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
