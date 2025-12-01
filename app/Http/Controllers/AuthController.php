@@ -42,6 +42,14 @@ class AuthController extends Controller
             ])->withInput($request->only('nip'));
         }
 
+        // If user status is not active
+        if (!$user->status) {
+            return back()->withErrors([
+                'nip' => 'Status user anda sedang tidak aktif, silakan kontak administrator.',
+            ])->withInput($request->only('nip'));
+        }
+
+
         // Attempt authentication (this will create the session)
         if (Auth::attempt(['nip' => $nip, 'password' => $password], $request->boolean('remember'))) {
             // Regenerate session to prevent fixation

@@ -37,7 +37,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: res.message || `${RESOURCE_name} saved successfully!`,
+                    text: res.message || `${RESOURCE_NAME} saved successfully!`,
                 }).then(() => {
                     window.location.href = BACK_URL;
                 });

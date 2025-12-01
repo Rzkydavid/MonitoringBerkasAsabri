@@ -46,9 +46,10 @@ class RoleMenuController extends Controller
                     return $row->parentMenu->name ?? '-';
                 })
 
-                ->addColumn('order', function ($row) {
+                ->editColumn('order', function ($row) {
                     return $row->order ?? '-';
                 })
+
                 ->addColumn('action', function ($row) {
                     $encodedId = base64_encode($row->id);
                     $url = route('roles-menus.edit', $encodedId);
@@ -80,47 +81,83 @@ class RoleMenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'role_id'  => 'required',
-            'menu_id'  => 'required',
-            'parent_id' => 'nullable',
+            'role_id'   => 'required',
+            'menu_id'   => 'required',
+            'parent_menu_id' => 'nullable',
+            'order'     => 'required|numeric|min:1',
         ]);
 
-        RoleMenu::create($request->all());
+        // Shift existing orders for same role
+        RoleMenu::where('role_id', $request->role_id)
+            ->where('order', '>=', $request->order)
+            ->increment('order');
+
+        RoleMenu::create([
+            'role_id'   => $request->role_id,
+            'menu_id'   => $request->menu_id,
+            'parent_menu_id' => $request->parent_menu_id,
+            'order'     => $request->order,
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Role menu created successfully'
+            'message' => 'Role Menu created successfully'
         ]);
     }
+
 
     public function edit($encoded)
     {
         $id = base64_decode($encoded);
 
-        $roleMenu = RoleMenu::findOrFail($id);
+        $role_menu = RoleMenu::findOrFail($id);
         $roles    = Role::all();
         $menus    = Menu::all();
         $parents  = Menu::all();
 
-        return view('roles-menus.form', compact('roleMenu', 'roles', 'menus', 'parents'));
+        return view('roles-menus.form', compact('role_menu', 'roles', 'menus', 'parents'));
     }
 
     public function update(Request $request, $encoded)
     {
+        $id = base64_decode($encoded);
+        $roleMenu = RoleMenu::findOrFail($id);
+
         $request->validate([
-            'role_id'  => 'required',
-            'menu_id'  => 'required',
-            'parent_id' => 'nullable',
+            'role_id'   => 'required',
+            'menu_id'   => 'required',
+            'parent_menu_id' => 'nullable',
+            'order'     => 'required|numeric|min:1',
         ]);
 
-        $id = base64_decode($encoded);
+        $oldOrder = $roleMenu->order;
+        $newOrder = $request->order;
 
-        $roleMenu = RoleMenu::findOrFail($id);
-        $roleMenu->update($request->all());
+        // Handle reorder only if the order changes
+        if ($newOrder != $oldOrder) {
+
+            if ($newOrder < $oldOrder) {
+                // Move UP
+                RoleMenu::where('role_id', $roleMenu->role_id)
+                    ->whereBetween('order', [$newOrder, $oldOrder - 1])
+                    ->increment('order');
+            } else {
+                // Move DOWN
+                RoleMenu::where('role_id', $roleMenu->role_id)
+                    ->whereBetween('order', [$oldOrder + 1, $newOrder])
+                    ->decrement('order');
+            }
+        }
+
+        $roleMenu->update([
+            'menu_id'   => $request->menu_id,
+            'parent_menu_id' => $request->parent_menu_id,
+            'order'     => $newOrder,
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Role menu updated successfully'
+            'message' => 'Role Menu updated successfully'
         ]);
     }
 

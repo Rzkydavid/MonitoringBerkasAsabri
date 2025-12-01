@@ -106,6 +106,9 @@
                     searchable: false
                 },
             ];
+            const TABLE_ORDER = [
+                [4, 'asc']
+            ]; // sort by “order” column
         </script>
         <script src="{{ asset('js/modules/table.js') }}"></script>
         <script src="{{ asset('js/modules/roles-menus.js') }}"></script>

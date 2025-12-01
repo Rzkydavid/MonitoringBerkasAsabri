@@ -92,7 +92,7 @@
             const ADD_ROLE_PRIVILEGES_URL = "{{ route('roles-privileges.assign') }}";
         </script>
         <script src="{{ asset('js/modules/table.js') }}"></script>
-        <script src="{{ asset('js/modules/role-privilege.js') }}"></script>
+        <script src="{{ asset('js/modules/roles-privileges.js') }}"></script>
     @endpush
 
 </x-layout>

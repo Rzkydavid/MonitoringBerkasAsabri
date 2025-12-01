@@ -59,23 +59,6 @@
                                                 value="{{ isset($menu) ? $menu->icon : '' }}">
                                         </div>
                                     </div>
-
-                                    {{-- Parent --}}
-                                    {{-- <div class="col-md-6">
-                                        <label for="parent_id" class="form-label">Parent</label>
-                                        <select name="parent_id" id="parent_id" class="form-control border-radius-lg">
-                                            <option value="">-- None --</option>
-
-                                            @foreach ($parents as $p)
-                                                <option value="{{ $p->id }}"
-                                                    {{ isset($menu) && $menu->parent_id == $p->id ? 'selected' : '' }}>
-                                                    {{ $p->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div> --}}
-
-
                                 </div>
 
                                 <button type="submit" class="btn bg-gradient-primary mt-4">

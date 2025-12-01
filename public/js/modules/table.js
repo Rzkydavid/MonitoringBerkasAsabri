@@ -7,7 +7,7 @@ $(document).ready(function () {
     // });
 
     function loadTable(extraParams = {}) {
-        $("#table").DataTable({
+        const config = {
             destroy: true,
             processing: true,
             serverSide: true,
@@ -16,7 +16,14 @@ $(document).ready(function () {
                 data: extraParams,
             },
             columns: TABLE_COLUMNS,
-        });
+        };
+
+        // 👉 If TABLE_ORDER is defined, apply it
+        if (typeof TABLE_ORDER !== "undefined" && Array.isArray(TABLE_ORDER)) {
+            config.order = TABLE_ORDER;
+        }
+
+        $("#table").DataTable(config);
     }
 
     // Initial load with no params → empty table for this page
