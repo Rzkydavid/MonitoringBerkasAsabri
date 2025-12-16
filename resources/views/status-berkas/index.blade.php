@@ -42,7 +42,7 @@
                                             </th>
                                             <th>No</th>
                                             <th>Status Terkini</th>
-                                            <th>Next Action</th>
+                                            <th>Langkah Berikutnya</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -70,7 +70,9 @@
                 },
                 {
                     data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'status_terkini',

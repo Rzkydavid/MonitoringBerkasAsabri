@@ -14,6 +14,8 @@ use App\Http\Controllers\RolePrivilegeController;
 use App\Http\Controllers\RoleMenuController;
 use App\Http\Controllers\StatusBerkasController;
 use App\Http\Controllers\JenisKlaimController;
+use App\Http\Controllers\BerkasKlaimController;
+use App\Http\Controllers\RiwayatBerkasKlaimController;
 use App\Http\Controllers\UserController;
 
 
@@ -288,6 +290,76 @@ Route::middleware('auth')->group(function () {
 		->name('users.update')
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'UPDATE_USER');
+
+	Route::get('/berkas-klaim', [BerkasKlaimController::class, 'index'])
+		->name('berkas-klaim.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_BERKAS_KLAIM');
+
+	Route::get('/berkas-klaim/data', [BerkasKlaimController::class, 'data'])
+		->name('berkas-klaim.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_BERKAS_KLAIM');
+
+	Route::get('/berkas-klaim/create', [BerkasKlaimController::class, 'create'])
+		->name('berkas-klaim.create')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_BERKAS_KLAIM');
+
+	Route::post('/berkas-klaim/store', [BerkasKlaimController::class, 'store'])
+		->name('berkas-klaim.store')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'CREATE_BERKAS_KLAIM');
+
+	Route::post('/berkas-klaim/bulk-delete', [BerkasKlaimController::class, 'bulkDelete'])
+		->name('berkas-klaim.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_BERKAS_KLAIM');
+
+	Route::get('/berkas-klaim/{encoded}/edit', [BerkasKlaimController::class, 'edit'])
+		->name('berkas-klaim.edit')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_BERKAS_KLAIM');
+
+	Route::put('/berkas-klaim/{encoded}/update', [BerkasKlaimController::class, 'update'])
+		->name('berkas-klaim.update')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'UPDATE_BERKAS_KLAIM');
+
+	Route::get('/riwayat-berkas-klaim', [RiwayatBerkasKlaimController::class, 'index'])
+		->name('riwayat-berkas-klaim.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_RIWAYAT_BERKAS_KLAIM');
+
+	Route::get('/riwayat-berkas-klaim/data', [RiwayatBerkasKlaimController::class, 'data'])
+		->name('riwayat-berkas-klaim.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_RIWAYAT_BERKAS_KLAIM');
+
+	Route::post('/riwayat-berkas-klaim/bulk-delete', [RiwayatBerkasKlaimController::class, 'bulkDelete'])
+		->name('riwayat-berkas-klaim.bulk-delete')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DELETE_RIWAYAT_BERKAS_KLAIM');
+
+	Route::get('/pending-task', [BerkasKlaimController::class, 'pendingTaskIndex'])
+		->name('pending-task.index')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_PENDING_TASK');
+
+	Route::get('/pending-task/data', [BerkasKlaimController::class, 'pendingTaskData'])
+		->name('pending-task.data')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'VIEW_PENDING_TASK');
+
+	Route::post('/berkas-klaim/accept', [BerkasKlaimController::class, 'acceptBerkas'])
+		->name('berkas-klaim.accept')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'ACCEPT_BERKAS_KLAIM');
+
+	Route::post('/berkas-klaim/reject', [BerkasKlaimController::class, 'rejectBerkas'])
+		->name('berkas-klaim.reject')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'REJECT_BERKAS_KLAIM');
 
 
 

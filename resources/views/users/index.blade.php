@@ -37,7 +37,7 @@
                                             <th><input type="checkbox" id="checkAll" class="table-checkbox"></th>
                                             <th>No</th>
                                             <th>Name</th>
-                                            <th>NIP</th>
+                                            <th>NIPAS</th>
                                             <th>Email</th>
                                             <th>Role</th>
                                             <th>Status</th>
@@ -71,7 +71,9 @@
                 },
                 {
                     data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'name',

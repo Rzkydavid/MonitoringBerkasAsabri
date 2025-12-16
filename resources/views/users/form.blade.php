@@ -39,7 +39,7 @@
 
                                     <div class="col-md-6">
                                         <div class="input-group input-group-outline my-3">
-                                            <label class="form-label">NIP</label>
+                                            <label class="form-label">NIPAS</label>
                                             <input type="text" name="nip" class="form-control"
                                                 value="{{ $user->nip ?? '' }}">
                                         </div>

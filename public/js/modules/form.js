@@ -3,16 +3,43 @@ $(document).ready(function () {
         window.location.href = BACK_URL;
     });
 
-    $("#btnReset").on("click", function () {
-        // Clear text fields
-        $("#form").find("input[type=text]").val("");
+    $("#btnReset").on("click", resetForm);
 
-        // Clear menu ID (switch to create mode)
+    function resetForm() {
+        // Clear normal text inputs
+        $("#form").find("input[type=text], input[type=date]").val("");
+
+        // Clear textarea
+        $("#form").find("textarea").val("");
+
+        // Reset ID
         $("#id").val("");
+
+        // Reset radio buttons
+        $("#form").find("input[type=radio]").prop("checked", false);
+
+        // Reset checkboxes (kalau ada)
+        $("#form").find("input[type=checkbox]").prop("checked", false);
+
+        // Reset Choices.js selects
+        if (window.choicesInstances) {
+            Object.values(window.choicesInstances).forEach((instance) => {
+                instance.removeActiveItems(); // unselect
+                instance.setChoiceByValue(""); // kembali ke placeholder
+            });
+        }
+
+        // Reset native selects (fallback)
+        $("#form").find("select").prop("selectedIndex", 0);
 
         // Reset floating labels
         $(".input-group-outline").removeClass("is-filled");
-    });
+
+        // Reset datepicker (flatpickr)
+        if (window.flatpickrInstances) {
+            window.flatpickrInstances.forEach((fp) => fp.clear());
+        }
+    }
 
     $("#form").on("submit", function (e) {
         e.preventDefault();
@@ -39,6 +66,7 @@ $(document).ready(function () {
                     title: "Success",
                     text: res.message || `${RESOURCE_NAME} saved successfully!`,
                 }).then(() => {
+                    resetForm();
                     window.location.href = BACK_URL;
                 });
             },

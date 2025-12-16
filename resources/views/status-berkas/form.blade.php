@@ -41,10 +41,10 @@
                                                 value="{{ isset($status_berkas) ? $status_berkas->status_terkini : '' }}">
                                         </div>
                                     </div>
-                                    {{-- Next Step --}}
+                                    {{-- Langkah Selanjutnya --}}
                                     <div class="col-md-6">
                                         <div class="input-group input-group-outline my-3">
-                                            <label class="form-label">Next Step</label>
+                                            <label class="form-label">Langkah Selanjutnya</label>
                                             <input type="text" name="next_step" id="next_step" class="form-control"
                                                 value="{{ isset($status_berkas) ? $status_berkas->next_step : '' }}">
                                         </div>
