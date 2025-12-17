@@ -377,6 +377,14 @@ class BerkasKlaimController extends Controller
              *  ROLE → NEXT_STEP FILTER
              *  ========================= */
             switch ($userRole) {
+                case 'Customer Service Officer':
+                    $query->whereHas(
+                        'statusBerkas',
+                        fn($q) =>
+                        $q->where('next_step', 'Menunggu Diterima CSO')
+                    );
+                    break;
+
                 case 'Proses':
                     $query->whereHas(
                         'statusBerkas',
@@ -596,6 +604,76 @@ class BerkasKlaimController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to accept berkas.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function rejectBerkas(Request $request)
+    {
+        $ids = $request->ids;
+
+        if (!is_array($ids) || count($ids) === 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No items selected.',
+            ], 400);
+        }
+
+        $user     = Auth::user();
+        $roleName = $user->role->name;
+
+        DB::beginTransaction();
+
+        try {
+            $berkasList = BerkasKlaim::with('statusBerkas')
+                ->whereIn('id', $ids)
+                ->get();
+
+            foreach ($berkasList as $klaim) {
+                $newStatusId  = null;
+
+                switch ($roleName) {
+
+                    case 'Proses':
+                        $newStatusId = 3;
+                        break;
+
+                    case 'Kepala Bidang':
+                        $newStatusId = 6;
+                        break;
+                }
+
+                // Skip if no valid transition
+                if (!$newStatusId) {
+                    continue;
+                }
+
+                // Update main berkas status
+                $klaim->update([
+                    'status_berkas_id' => $newStatusId
+                ]);
+
+                // Create history
+                RiwayatBerkasKlaim::create([
+                    'berkas_klaim_id'  => $klaim->id,
+                    'status_berkas_id' => $newStatusId,
+                    'user_id'          => $user->id,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selected berkas successfully rejected.',
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to reject berkas.',
                 'error'   => $e->getMessage(),
             ], 500);
         }

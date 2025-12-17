@@ -21,6 +21,20 @@
                                             style="font-size:16px; vertical-align:middle;">save</i>
                                         <span style="vertical-align:middle;">Terima Berkas</span>
                                     </button>
+
+                                    @php
+                                        $role = Auth::user()->role; // adjust if different
+                                    @endphp
+
+                                    @if (in_array($role->name, ['Kepala Bidang', 'Proses']))
+                                        <button id="rejectSelected" class="btn btn-sm text-white"
+                                            style="background-color:#e53935;">
+                                            <i class="material-icons"
+                                                style="font-size:16px; vertical-align:middle;">cancel</i>
+                                            <span style="vertical-align:middle;">Tolak Berkas</span>
+                                        </button>
+                                    @endif
+
                                 </div>
 
                             </div>
