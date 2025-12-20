@@ -75,3 +75,12 @@ table.dataTable td:first-child {
 .dataTable tbody th {
     vertical-align: middle !important;
 }
+
+.material-icons.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}

@@ -118,4 +118,14 @@ $(document).ready(function () {
         const id = $(this).data("id");
         window.location.href = `/${RESOURCE_NAME}/${id}/edit`;
     });
+
+    $("#period").on("change", function () {
+        const period = $(this).val();
+        console.log("Selected period:", period);
+        if (typeof reloadTableWithParams === "function") {
+            reloadTableWithParams({
+                period: period,
+            });
+        }
+    });
 });

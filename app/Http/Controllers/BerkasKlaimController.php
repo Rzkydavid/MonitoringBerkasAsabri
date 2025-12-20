@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JenisKlaim;
 use App\Models\RiwayatBerkasKlaim;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BerkasKlaimController extends Controller
 {
@@ -21,13 +22,25 @@ class BerkasKlaimController extends Controller
     {
         if ($request->ajax()) {
 
+            $period = $request->period;
+
+            // If no period selected, return empty table
+            if (!$period) {
+                return DataTables::of(collect([]))->make(true);
+            }
+
+            // Expecting format: yyyy-mm
+            if (!preg_match('/^\d{4}-\d{2}$/', $period)) {
+                return DataTables::of(collect([]))->make(true);
+            }
+
+            [$year, $month] = explode('-', $period);
+
             $redBadge   = fn($v) => '<span class="badge bg-gradient-danger">' . $v . '</span>';
             $greenBadge = fn($v) => '<span class="badge bg-gradient-success">' . $v . '</span>';
 
             $badge = function ($value, $field) use ($redBadge, $greenBadge) {
-
                 switch ($field) {
-
                     case 'kelengkapan':
                         return $value === 'Lengkap'
                             ? $greenBadge('Lengkap')
@@ -68,14 +81,19 @@ class BerkasKlaimController extends Controller
                 }
             };
 
-            $query = BerkasKlaim::with(['jenisKlaim', 'statusBerkas', 'creator']);
+            $query = BerkasKlaim::with(['jenisKlaim', 'statusBerkas', 'creator'])
+                ->whereYear('tgl_berkas_diterima_cso', (int) $year)
+                ->whereMonth('tgl_berkas_diterima_cso', (int) $month)
+                ->orderBy('tgl_berkas_diterima_cso', 'desc');
 
             return DataTables::of($query)
                 ->addIndexColumn()
 
-                ->addColumn('checkbox', function ($row) {
-                    return '<input type="checkbox" class="row-checkbox table-checkbox" value="' . $row->id . '">';
-                })
+                ->addColumn(
+                    'checkbox',
+                    fn($row) =>
+                    '<input type="checkbox" class="row-checkbox table-checkbox" value="' . $row->id . '">'
+                )
 
                 ->addColumn('jenis_klaim', fn($row) => optional($row->jenisKlaim)->name)
                 ->addColumn('created_by_name', fn($row) => optional($row->creator)->name)
@@ -83,93 +101,98 @@ class BerkasKlaimController extends Controller
                 ->addColumn('status_terkini', fn($row) => optional($row->statusBerkas)->status_terkini)
                 ->addColumn('next_step', fn($row) => optional($row->statusBerkas)->next_step)
 
-                ->addColumn('tgl_berkas_diterima_cso', function ($row) {
-                    return \Carbon\Carbon::parse($row->tgl_berkas_diterima_cso)->format('d M Y');
-                })
+                ->addColumn(
+                    'tgl_berkas_diterima_cso',
+                    fn($row) =>
+                    $row->tgl_berkas_diterima_cso
+                        ? \Carbon\Carbon::parse($row->tgl_berkas_diterima_cso)->format('d M Y')
+                        : '-'
+                )
 
                 ->addColumn('status_terima_lainnya', fn($row) => $row->status_terima_klaim_masuk_lainnya)
 
-                // === ENUM BADGE FIELDS ===
-                // KELENGKAPAN PERSYARATAN
+                // ENUM BADGES
                 ->addColumn(
                     'kelengkapan_persyaratan',
                     fn($row) => $badge($row->kelengkapan_persyaratan, 'kelengkapan')
                 )
-
-                // COPY DOKUMEN
                 ->addColumn(
                     'copy_seluruh_dokumen_terbaca_jelas',
                     fn($row) => $badge($row->copy_seluruh_dokumen_terbaca_jelas, 'copy_dokumen')
                 )
-
-                // AKTA KEMATIAN
                 ->addColumn(
                     'keaslian_akta_kematian',
                     fn($row) => $badge($row->keaslian_akta_kematian, 'akta_kematian')
                 )
-
-                // FLAGGING KREDIT
                 ->addColumn(
                     'flagging_kredit',
                     fn($row) => $badge($row->flagging_kredit, 'flagging')
                 )
-
-                // NOMOR WA
                 ->addColumn(
                     'nomor_wa_pengaju',
                     fn($row) => $badge($row->nomor_wa_pengaju, 'wa')
                 )
-
-                // NOMOR REKENING
                 ->addColumn(
                     'nomor_rekening_pengaju',
                     fn($row) => $badge($row->nomor_rekening_pengaju, 'rekening')
                 )
-
-                // PERLU KONFIRMASI ULANG
                 ->addColumn(
                     'perlu_konfirmasi_ulang',
                     fn($row) => $badge($row->perlu_konfirmasi_ulang, 'konfirmasi_ulang')
                 )
 
-
-                // plain text columns still shown normally
                 ->addColumn('catatan_konfirmasi', fn($row) => $row->catatan_konfirmasi)
-                ->addColumn('selesai_konfirmasi', function ($row) {
-                    return \Carbon\Carbon::parse($row->selesai_konfirmasi)->format('d M Y');
-                })
+                ->addColumn(
+                    'selesai_konfirmasi',
+                    fn($row) =>
+                    $row->selesai_konfirmasi
+                        ? \Carbon\Carbon::parse($row->selesai_konfirmasi)->format('d M Y')
+                        : '-'
+                )
 
-                // Action button
                 ->addColumn('action', function ($row) {
+                    $encodedId = base64_encode($row->id);
+                    $url = route('berkas-klaim.edit', $encodedId);
+
                     $user = Auth::user();
 
-                    $canCSO = $user->role->name === 'Customer Service Officer';
-                    $canEdit = $canCSO && optional($row->statusBerkas)->status_terkini === "Diterima CSO";
+                    $canEdit =
+                        $user->role->name === 'Customer Service Officer' &&
+                        optional($row->statusBerkas)->status_terkini === 'Diterima CSO';
 
-                    if ($canEdit) {
-                        return '<a href="' . route('berkas-klaim.edit', $row->id) . '" class="btn btn-warning btn-sm">EDIT</a>';
-                    }
+                    $editBtn = $canEdit
+                        ? '<a href="' . $url . '" class="btn btn-sm btn-warning
+                                data-bs-toggle="tooltip"
+                                title="Edit"">
+                                <i class="material-icons fs-6">edit</i> Edit
+                            </a>'
+                        : '';
 
-                    return '';
+                    $lkBtn = '
+                        <button
+                            class="btn btn-danger btn-sm btn-download-lk"
+                            data-id="' . $row->id . '">
+                            <span class="icon material-icons">picture_as_pdf</span>
+                            <span class="text">LK</span>
+                        </button>
+                        ';
+
+                    $ttrBtn = '
+                        <button
+                            class="btn btn-danger btn-sm btn-download-ttr"
+                            data-id="' . $row->id . '">
+                            <span class="icon material-icons">picture_as_pdf</span>
+                            <span class="text">TTR</span>
+                        </button>
+                        ';
+
+
+                    return $editBtn . ' ' . $lkBtn . ' ' . $ttrBtn;
                 })
-                // ->addColumn('action', function ($row) {
-                //     $encodedId = base64_encode($row->id);
-                //     $url = route('berkas-klaim.edit', $encodedId);
-
-                //     return '
-                //     <a href="' . $url . '" class="btn btn-sm btn-warning"
-                //         data-bs-toggle="tooltip"
-                //         title="Edit">
-                //         <i class="material-icons fs-6">edit</i> Edit
-                //     </a>
-                // ';
-                // })
 
                 ->rawColumns([
                     'checkbox',
                     'action',
-
-                    // badge-based fields
                     'kelengkapan_persyaratan',
                     'copy_seluruh_dokumen_terbaca_jelas',
                     'keaslian_akta_kematian',
@@ -178,10 +201,10 @@ class BerkasKlaimController extends Controller
                     'nomor_rekening_pengaju',
                     'perlu_konfirmasi_ulang',
                 ])
-
                 ->make(true);
         }
     }
+
 
     public function bulkDelete(Request $request)
     {
@@ -220,11 +243,10 @@ class BerkasKlaimController extends Controller
         ]);
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
-            'nama_peserta'                      => 'required|string|max:255',
+            'nama_peserta'             => 'required|string|max:255',
             'nomor_identitas'          => 'required|string|max:255',
             'jenis_klaim_id'           => 'required|integer',
             'tgl_berkas_diterima_cso'  => 'required|date',
@@ -677,5 +699,29 @@ class BerkasKlaimController extends Controller
                 'error'   => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function downloadLembarKontrol($id)
+    {
+        $data = BerkasKlaim::findOrFail($id);
+
+        $pdf = Pdf::loadView('berkas-klaim.lembar-kontrol-klaim', [
+            'data' => $data,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download(
+            'Lembar_Kontrol_Klaim_[' . $data->nama_peserta . '].pdf'
+        );
+    }
+
+    public function downloadTandaTerima($id)
+    {
+        $data = BerkasKlaim::findOrFail($id);
+
+        $pdf = Pdf::loadView('berkas-klaim.tanda-terima', [
+            'data' => $data
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('Tanda_Terima_' . $data->id . '.pdf');
     }
 }

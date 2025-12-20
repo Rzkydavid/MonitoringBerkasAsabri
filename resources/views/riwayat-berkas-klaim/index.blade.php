@@ -28,6 +28,13 @@
                         </div>
 
                         <div class="card-body pb-2">
+                            <div class="mb-2 col-md-2">
+                                <div class="input-group input-group-static my-3">
+                                    <label>Periode</label>
+                                    <input type="text" class="form-control" id="period">
+                                </div>
+                            </div>
+                            <br><br>
                             <div class="table-responsive">
                                 <table id="table" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
@@ -90,7 +97,18 @@
                 },
             ];
         </script>
-
+        <script>
+            flatpickr("#period", {
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "M Y"
+                    })
+                ],
+                altInput: true,
+            });
+        </script>
         <script src="{{ asset('js/modules/table.js') }}"></script>
     @endpush
 

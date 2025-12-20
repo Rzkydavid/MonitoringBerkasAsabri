@@ -361,6 +361,17 @@ Route::middleware('auth')->group(function () {
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'REJECT_BERKAS_KLAIM');
 
+	Route::get('/berkas-klaim/{id}/download-lembar-kontrol', [BerkasKlaimController::class, 'downloadLembarKontrol'])
+		->name('berkas-klaim.download-lembar-kontrol')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DOWNLOAD_LEMBAR_KONTROL');
+
+	Route::get('/berkas-klaim/{id}/download-tanda-terima', [BerkasKlaimController::class, 'downloadTandaTerima'])
+		->name('berkas-klaim.download-tanda-terima')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'DOWNLOAD_TANDA_TERIMA');
+
+
 
 
 	// Route::get('/', function () {

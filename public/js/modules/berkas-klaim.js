@@ -1,141 +1,59 @@
 $(document).ready(function () {
-    $(document).on("click", "#acceptSelected", function () {
-        // Collect selected ids
-        let ids = [];
-        $(".row-checkbox:checked").each(function () {
-            ids.push($(this).val());
-        });
+    $(document).on("click", ".btn-download-lk", function () {
+        const btn = $(this);
+        const id = btn.data("id");
 
-        if (ids.length === 0) {
-            Swal.fire({
-                icon: "warning",
-                title: "No items selected",
-                text: "Please select items first.",
-            });
-            return;
-        }
+        const icon = btn.find(".icon");
+        const text = btn.find(".text");
 
-        // Confirmation dialog
-        Swal.fire({
-            title: `Sure want to accept ${ids.length} item(s)?`,
-            text: "This action cannot be undone.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#35e54cff",
-            cancelButtonColor: "#6c757d",
-            confirmButtonText: "Yes, accept!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Notiflix.Loading.standard("Loading...");
+        btn.prop("disabled", true);
 
-                $.ajax({
-                    url: ACCEPT_URL,
-                    type: "POST",
-                    data: {
-                        ids: ids,
-                        _token: CSRF_TOKEN,
-                    },
-                    success: function (res) {
-                        Notiflix.Loading.remove();
+        icon.text("autorenew").addClass("spin");
 
-                        if (res.success) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Accepted",
-                                text: res.message,
-                            });
+        text.text("Loading...");
 
-                            $("#table").DataTable().ajax.reload(null, false);
-                            $("#checkAll").prop("checked", false);
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Failed",
-                                text: res.message,
-                            });
-                        }
-                    },
-                    error: function () {
-                        Notiflix.Loading.remove();
+        const url = `/berkas-klaim/${id}/download-lembar-kontrol`;
 
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Something went wrong.",
-                        });
-                    },
-                });
-            }
-        });
+        const a = document.createElement("a");
+        a.href = url;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => {
+            btn.prop("disabled", false);
+            icon.text("picture_as_pdf").removeClass("spin");
+            text.text("LK");
+        }, 1500);
     });
 
-    $(document).on("click", "#rejectSelected", function () {
-        // Collect selected ids
-        let ids = [];
-        $(".row-checkbox:checked").each(function () {
-            ids.push($(this).val());
-        });
+    $(document).on("click", ".btn-download-ttr", function () {
+        const btn = $(this);
+        const id = btn.data("id");
 
-        if (ids.length === 0) {
-            Swal.fire({
-                icon: "warning",
-                title: "No items selected",
-                text: "Please select items first.",
-            });
-            return;
-        }
+        const icon = btn.find(".icon");
+        const text = btn.find(".text");
 
-        // Confirmation dialog
-        Swal.fire({
-            title: `Sure want to reject ${ids.length} item(s)?`,
-            text: "This action cannot be undone.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#e53935",
-            cancelButtonColor: "#6c757d",
-            confirmButtonText: "Yes, reject!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Notiflix.Loading.standard("Loading...");
+        btn.prop("disabled", true);
 
-                $.ajax({
-                    url: REJECT_URL,
-                    type: "POST",
-                    data: {
-                        ids: ids,
-                        _token: CSRF_TOKEN,
-                    },
-                    success: function (res) {
-                        Notiflix.Loading.remove();
+        icon.text("autorenew").addClass("spin");
 
-                        if (res.success) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Rejected",
-                                text: res.message,
-                            });
+        text.text("Loading...");
 
-                            $("#table").DataTable().ajax.reload(null, false);
-                            $("#checkAll").prop("checked", false);
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Failed",
-                                text: res.message,
-                            });
-                        }
-                    },
-                    error: function () {
-                        Notiflix.Loading.remove();
+        const url = `/berkas-klaim/${id}/download-tanda-terima`;
 
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Something went wrong.",
-                        });
-                    },
-                });
-            }
-        });
+        const a = document.createElement("a");
+        a.href = url;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => {
+            btn.prop("disabled", false);
+            icon.text("picture_as_pdf").removeClass("spin");
+            text.text("TTR");
+        }, 1500);
     });
 });

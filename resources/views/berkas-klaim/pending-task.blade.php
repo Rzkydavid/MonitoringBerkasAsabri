@@ -188,7 +188,7 @@
             ];
         </script>
         <script src="{{ asset('js/modules/table.js') }}"></script>
-        <script src="{{ asset('js/modules/berkas-klaim.js') }}"></script>
+        <script src="{{ asset('js/modules/pending-task.js') }}"></script>
     @endpush
 
 </x-layout>
