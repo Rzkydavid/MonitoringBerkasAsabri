@@ -168,23 +168,23 @@ class BerkasKlaimController extends Controller
                             </a>'
                         : '';
 
-                    $lkBtn = '
+                    $lkBtn = $user->role->name === 'Customer Service Officer' ? '
                         <button
                             class="btn btn-danger btn-sm btn-download-lk"
                             data-id="' . $row->id . '">
                             <span class="icon material-icons">picture_as_pdf</span>
                             <span class="text">LK</span>
                         </button>
-                        ';
+                        ' : '';
 
-                    $ttrBtn = '
+                    $ttrBtn = $user->role->name === 'Customer Service Officer' ? '
                         <button
                             class="btn btn-danger btn-sm btn-download-ttr"
                             data-id="' . $row->id . '">
                             <span class="icon material-icons">picture_as_pdf</span>
                             <span class="text">TTR</span>
                         </button>
-                        ';
+                        ' : '';
 
 
                     return $editBtn . ' ' . $lkBtn . ' ' . $ttrBtn;
@@ -204,7 +204,6 @@ class BerkasKlaimController extends Controller
                 ->make(true);
         }
     }
-
 
     public function bulkDelete(Request $request)
     {
@@ -233,7 +232,6 @@ class BerkasKlaimController extends Controller
             ], 500);
         }
     }
-
 
     public function create()
     {
@@ -332,7 +330,6 @@ class BerkasKlaimController extends Controller
     {
         return view('berkas-klaim.pending-task');
     }
-
 
     public function pendingTaskData(Request $request)
     {
@@ -515,8 +512,64 @@ class BerkasKlaimController extends Controller
                     \Carbon\Carbon::parse($row->selesai_konfirmasi)->format('d M Y')
                 )
 
+                ->addColumn('action', function ($row) {
+
+                    $nextStep = optional($row->statusBerkas)->next_step;
+                    $id       = $row->id;
+
+                    $btn = '';
+
+                    // 1. Menunggu diterima%
+                    if (str_starts_with(strtolower($nextStep), 'menunggu diterima')) {
+                        $btn .= '
+                            <button class="btn btn-sm btn-success btn-action"
+                                data-id="' . $id . '"
+                                data-action="accept">
+                                <i class="material-icons" style="font-size:16px;">check_circle</i> Terima
+                            </button>
+                        ';
+                    }
+
+                    // 2. Selesai only
+                    elseif (in_array($nextStep, [
+                        'Menunggu Scan dan Arsip',
+                        'Menunggu Penyimpanan Berkas Fisik'
+                    ])) {
+                        $btn .= '
+                            <button class="btn btn-sm btn-info btn-action"
+                                data-id="' . $id . '"
+                                data-action="finish">
+                                <i class="material-icons" style="font-size:16px;">task_alt</i> Selesai
+                            </button>
+                        ';
+                    }
+
+                    // 3. Selesai + Reject
+                    elseif (in_array($nextStep, [
+                        'Menunggu Input dan Verif',
+                        'Menunggu Approval Kepala Bidang'
+                    ])) {
+                        $btn .= '
+                            <button class="btn btn-sm btn-info btn-action"
+                                data-id="' . $id . '"
+                                data-action="finish">
+                                <i class="material-icons" style="font-size:16px;">task_alt</i> Selesai
+                            </button>
+
+                            <button class="btn btn-sm btn-danger btn-action"
+                                data-id="' . $id . '"
+                                data-action="reject">
+                                <i class="material-icons" style="font-size:16px;">cancel</i> Tolak
+                            </button>
+                        ';
+                    }
+
+                    return $btn;
+                })
+
                 ->rawColumns([
                     'checkbox',
+                    'action',
                     'kelengkapan_persyaratan',
                     'copy_seluruh_dokumen_terbaca_jelas',
                     'keaslian_akta_kematian',
@@ -698,6 +751,111 @@ class BerkasKlaimController extends Controller
                 'message' => 'Failed to reject berkas.',
                 'error'   => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function acceptSingle(Request $request)
+    {
+        $id = $request->id;
+
+        if (!$id) {
+            return response()->json(['success' => false], 400);
+        }
+
+        $user     = Auth::user();
+        $roleName = $user->role->name;
+
+        DB::beginTransaction();
+
+        try {
+            $klaim = BerkasKlaim::with('statusBerkas')->findOrFail($id);
+            $nextStep = optional($klaim->statusBerkas)->next_step;
+            $newStatusId = null;
+
+            switch ($roleName) {
+                case 'Customer Service Officer':
+                    if ($nextStep === 'Menunggu Diterima CSO') $newStatusId = 1;
+                    break;
+
+                case 'Proses':
+                    if ($nextStep === 'Menunggu diterima Tim Proses') $newStatusId = 2;
+                    elseif ($nextStep === 'Menunggu Input dan Verif') $newStatusId = 4;
+                    break;
+
+                case 'Kepala Bidang':
+                    if ($nextStep === 'Menunggu diterima Kepala Bidang') $newStatusId = 5;
+                    elseif ($nextStep === 'Menunggu Approval Kepala Bidang') $newStatusId = 7;
+                    break;
+
+                case 'Dosir':
+                    if ($nextStep === 'Menunggu Diterima Dosir') $newStatusId = 8;
+                    elseif ($nextStep === 'Menunggu Scan dan Arsip') $newStatusId = 9;
+                    elseif ($nextStep === 'Menunggu Penyimpanan Berkas Fisik') $newStatusId = 10;
+                    break;
+
+                case 'Korespondensi':
+                    if ($nextStep === 'Menunggu Penyimpanan Berkas Fisik') $newStatusId = 10;
+                    break;
+            }
+
+            if (!$newStatusId) {
+                throw new \Exception('Invalid transition');
+            }
+
+            $klaim->update(['status_berkas_id' => $newStatusId]);
+
+            RiwayatBerkasKlaim::create([
+                'berkas_klaim_id'  => $klaim->id,
+                'status_berkas_id' => $newStatusId,
+                'user_id'          => $user->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json(['success' => false], 500);
+        }
+    }
+
+    public function rejectSingle(Request $request)
+    {
+        $id = $request->id;
+
+        $user     = Auth::user();
+        $roleName = $user->role->name;
+
+        DB::beginTransaction();
+
+        try {
+            $klaim = BerkasKlaim::with('statusBerkas')->findOrFail($id);
+            $newStatusId = null;
+
+            if ($roleName === 'Proses') {
+                $newStatusId = 3;
+            } elseif ($roleName === 'Kepala Bidang') {
+                $newStatusId = 6;
+            }
+
+            if (!$newStatusId) {
+                throw new \Exception('Invalid reject');
+            }
+
+            $klaim->update(['status_berkas_id' => $newStatusId]);
+
+            RiwayatBerkasKlaim::create([
+                'berkas_klaim_id'  => $klaim->id,
+                'status_berkas_id' => $newStatusId,
+                'user_id'          => $user->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json(['success' => false], 500);
         }
     }
 

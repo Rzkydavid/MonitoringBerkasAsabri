@@ -1,0 +1,22 @@
+/* Fix Choices.js dropdown being hidden by Material Dashboard header */
+.choices {
+    overflow: visible !important;
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    z-index: 9999 !important;
+}
+
+.choices__list--dropdown {
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    /* max-height: 240px; */    
+}
+
+.choices__list--dropdown .choices__list {
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    /* scroll-behavior: smooth; */
+}
+

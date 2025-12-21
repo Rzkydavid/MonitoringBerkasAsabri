@@ -69,6 +69,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/datatables-fix.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables-md2-fix.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/choices.css') }}">
 </head>
 
 <body class="{{ $bodyClass }}">
@@ -93,6 +94,47 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const main = document.querySelector(".main-content");
+
+            if (main && main._ps) {
+                main._ps.destroy();
+                main._ps = null;
+            }
+
+            main.style.overflowY = "auto";
+        });
+    </script>
+    <script>
+        document.addEventListener("click", function() {
+            const dropdown = document.querySelector(".choices__list--dropdown.is-active");
+            const main = document.querySelector(".main-content");
+
+            if (!main) return;
+
+            if (dropdown) {
+                main.style.overflow = "hidden";
+            } else {
+                main.style.overflow = "";
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener(
+            "wheel",
+            function(e) {
+                const list = e.target.closest(".choices__list--dropdown .choices__list");
+                if (!list) return;
+
+                e.preventDefault(); // stop dashboard scroll
+                list.scrollTop += e.deltaY; // manual scroll
+            }, {
+                passive: false
+            }
+        );
+    </script>
 </body>
 
 </html>

@@ -14,7 +14,7 @@
 
                                 <h6 class="text-white text-capitalize ps-3 mb-0">Berkas Klaim</h6>
 
-                                <div class="d-flex align-items-center me-3" style="gap: 8px;">
+                                {{-- <div class="d-flex align-items-center me-3" style="gap: 8px;">
                                     <button id="acceptSelected" class="btn btn-sm text-white"
                                         style="background-color:#3be535;">
                                         <i class="material-icons"
@@ -35,7 +35,7 @@
                                         </button>
                                     @endif
 
-                                </div>
+                                </div> --}}
 
                             </div>
                         </div>
@@ -72,6 +72,7 @@
                                             <th>Langkah Selanjutnya</th>
 
                                             <th>Created By</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -184,6 +185,12 @@
                 {
                     data: 'created_by_name',
                     name: 'created_by'
+                },
+
+                {
+                    data: 'action',
+                    orderable: false,
+                    searchable: false
                 },
             ];
         </script>

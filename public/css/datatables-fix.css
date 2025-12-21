@@ -84,3 +84,26 @@ table.dataTable td:first-child {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
+
+/* Vertically center content inside DataTable cells */
+table.dataTable tbody td {
+    vertical-align: middle !important;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-action .material-icons {
+    font-size: 1.1em;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

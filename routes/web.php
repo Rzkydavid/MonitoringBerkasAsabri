@@ -371,6 +371,17 @@ Route::middleware('auth')->group(function () {
 		->middleware(['auth', 'privilege'])
 		->defaults('privilege', 'DOWNLOAD_TANDA_TERIMA');
 
+	Route::post('/pending-task/accept', [BerkasKlaimController::class, 'acceptSingle'])
+		->name('pending-task.accept')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'ACCEPT_BERKAS_KLAIM');
+
+	Route::post('/pending-task/reject', [BerkasKlaimController::class, 'rejectSingle'])
+		->name('pending-task.reject')
+		->middleware(['auth', 'privilege'])
+		->defaults('privilege', 'REJECT_BERKAS_KLAIM');
+
+
 
 
 

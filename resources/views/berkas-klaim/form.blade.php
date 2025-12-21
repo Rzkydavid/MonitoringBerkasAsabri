@@ -307,6 +307,18 @@
 
             });
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const main = document.querySelector(".main-content");
+
+                if (main && main._ps) {
+                    main._ps.destroy();
+                    main._ps = null;
+                }
+
+                main.style.overflowY = "auto";
+            });
+        </script>
     @endpush
 
 </x-layout>
