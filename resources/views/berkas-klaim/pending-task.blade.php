@@ -71,8 +71,8 @@
                                             <th>Status Terkini</th>
                                             <th>Langkah Selanjutnya</th>
 
-                                            <th>Created By</th>
-                                            <th>Action</th>
+                                            <th>Dibuat Oleh</th>
+                                            <th>Tindakan</th>
                                         </tr>
                                     </thead>
                                 </table>

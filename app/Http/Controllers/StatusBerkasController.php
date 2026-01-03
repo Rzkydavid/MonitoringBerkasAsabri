@@ -57,7 +57,7 @@ class StatusBerkasController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Status Berkas created successfully'
+            'message' => 'Status Berkas berhasil dibuat'
         ]);
     }
 
@@ -82,7 +82,7 @@ class StatusBerkasController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Status Berkas updated successfully'
+            'message' => 'Status Berkas berhasil diperbarui'
         ]);
     }
 
@@ -93,7 +93,7 @@ class StatusBerkasController extends Controller
         if (!is_array($ids) || count($ids) === 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'No items selected.',
+                'message' => 'Tidak ada item yang dipilih.',
             ], 400);
         }
 
@@ -104,12 +104,12 @@ class StatusBerkasController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => count($ids) . ' item(s) deleted successfully.',
+                'message' => count($ids) . ' item berhasil dihapus.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Delete failed: ' . $e->getMessage(),
+                'message' => 'Gagal Hapus: ' . $e->getMessage(),
             ], 500);
         }
     }

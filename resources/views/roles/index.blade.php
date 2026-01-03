@@ -16,14 +16,13 @@
 
                                 <div class="d-flex align-items-center me-3" style="gap: 8px;">
                                     <a href="{{ route('roles.create') }}" class="btn btn-sm btn-light text-primary">
-                                        + Add Role
+                                        Tambah Role
                                     </a>
 
                                     <button id="deleteSelected" class="btn btn-sm text-white"
                                         style="background-color:#e53935;">
-                                        <i class="material-icons"
-                                            style="font-size:16px; vertical-align:middle;">delete</i>
-                                        <span style="vertical-align:middle;">Delete Selected</span>
+                                        <i class="material-icons" style="font-size:5px; vertical-align:middle;"></i>
+                                        <span style="vertical-align:middle;">Hapus</span>
                                     </button>
                                 </div>
 

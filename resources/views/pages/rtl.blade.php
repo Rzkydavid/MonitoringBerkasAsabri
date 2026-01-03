@@ -829,7 +829,7 @@
                 </div>
             </div>
             <footer class="footer py-4  ">
-                <div class="container-fluid">
+                {{-- <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
                         <div class="col-lg-6 mb-lg-0 mb-4">
                             <div class="copyright text-center text-sm text-muted text-lg-end">
@@ -865,7 +865,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </footer>
         </div>
     </main>
@@ -876,8 +876,8 @@
         <div class="card shadow-lg">
             <div class="card-header pb-0 pt-3">
                 <div class="float-end">
-                    <h5 class="mt-3 mb-0">Material UI Configurator</h5>
-                    <p>See our dashboard options.</p>
+                    <h5 class="mt-3 mb-0">Konfigurator Material UI</h5>
+                    <p>Lihat opsi dashboard kami.</p>
                 </div>
                 <div class="float-start mt-4">
                     <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -890,7 +890,7 @@
             <div class="card-body pt-sm-3 pt-0">
                 <!-- Sidebar Backgrounds -->
                 <div>
-                    <h6 class="mb-0">Sidebar Colors</h6>
+                    <h6 class="mb-0">Warna Sidebar</h6>
                 </div>
                 <a href="javascript:void(0)" class="switch-trigger background-color">
                     <div class="badge-colors my-2 text-end">
@@ -910,21 +910,22 @@
                 </a>
                 <!-- Sidenav Type -->
                 <div class="mt-3">
-                    <h6 class="mb-0">Sidenav Type</h6>
-                    <p class="text-sm">Choose between 2 different sidenav types.</p>
+                    <h6 class="mb-0">Jenis Navigasi</h6>
+                    <p class="text-sm">Pilih antara 2 jenis navigasi samping yang berbeda.</p>
                 </div>
                 <div class="d-flex">
                     <button class="btn bg-gradient-dark px-3 mb-2 active" data-class="bg-gradient-dark"
-                        onclick="sidebarType(this)">Dark</button>
+                        onclick="sidebarType(this)">Gelap</button>
                     <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent"
-                        onclick="sidebarType(this)">Transparent</button>
+                        onclick="sidebarType(this)">Transparan</button>
                     <button class="btn bg-gradient-dark px-3 mb-2 me-2" data-class="bg-white"
-                        onclick="sidebarType(this)">White</button>
+                        onclick="sidebarType(this)">Putih</button>
                 </div>
-                <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+                <p class="text-sm d-xl-none d-block mt-2">Anda dapat mengubah Jenis Navigasi hanya pada tampilan
+                    desktop.</p>
                 <!-- Navbar Fixed -->
                 <div class="mt-3 d-flex">
-                    <h6 class="mb-0">Navbar Fixed</h6>
+                    <h6 class="mb-0">Navigasi tetap</h6>
                     <div class="form-check form-switch me-auto my-auto">
                         <input class="form-check-input mt-1 float-end me-auto" type="checkbox" id="navbarFixed"
                             onclick="navbarFixed(this)">
@@ -932,13 +933,13 @@
                 </div>
                 <hr class="horizontal dark my-3">
                 <div class="mt-2 d-flex">
-                    <h6 class="mb-0">Light / Dark</h6>
+                    <h6 class="mb-0">Terang / Gelap</h6>
                     <div class="form-check form-switch me-auto my-auto">
                         <input class="form-check-input mt-1 float-end me-auto" type="checkbox" id="dark-version"
                             onclick="darkMode(this)">
                     </div>
                 </div>
-                <hr class="horizontal dark my-sm-4">
+                {{-- <hr class="horizontal dark my-sm-4">
                 <a class="btn btn-outline-dark w-100" href="">View documentation</a>
                 <div class="w-100 text-center">
                     <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard"
@@ -953,7 +954,7 @@
                         class="btn btn-dark mb-0 me-2" target="_blank">
                         <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

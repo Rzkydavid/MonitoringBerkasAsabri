@@ -15,14 +15,13 @@
                                 <h6 class="text-white text-capitalize ps-3 mb-0">Role Privilege table</h6>
 
                                 <div class="d-flex align-items-center me-3" style="gap: 8px;">
-                                    <button class="btn btn-light text-primary" id="openAddPrivilegeModal">+ Add
+                                    <button class="btn btn-light text-primary" id="openAddPrivilegeModal">Tambah
                                         Privileges</button>
 
                                     <button id="deleteSelected" class="btn btn-sm text-white"
                                         style="background-color:#e53935;">
-                                        <i class="material-icons"
-                                            style="font-size:16px; vertical-align:middle;">delete</i>
-                                        <span style="vertical-align:middle;">Delete Selected</span>
+                                        <i class="material-icons" style="font-size:5px; vertical-align:middle;"></i>
+                                        <span style="vertical-align:middle;">Hapus</span>
                                     </button>
                                 </div>
 

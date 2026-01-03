@@ -49,7 +49,7 @@ class MenuController extends Controller
         if (!is_array($ids) || count($ids) === 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'No items selected.',
+                'message' => 'Tidak ada item yang dipilih.',
             ], 400);
         }
 
@@ -60,12 +60,12 @@ class MenuController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => count($ids) . ' item(s) deleted successfully.',
+                'message' => count($ids) . ' item berhasil dihapus.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Delete failed: ' . $e->getMessage(),
+                'message' => 'Gagal Hapus: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -89,7 +89,7 @@ class MenuController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Menu created successfully'
+            'message' => 'Menu berhasil dibuat.'
         ]);
     }
 
@@ -114,13 +114,13 @@ class MenuController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Menu updated successfully'
+            'message' => 'Menu berhasil diperbarui.'
         ]);
     }
 
     public function destroy(Menu $menu)
     {
         $menu->delete();
-        return back()->with('success', 'Menu deleted');
+        return back()->with('success', 'Menu dihapus');
     }
 }

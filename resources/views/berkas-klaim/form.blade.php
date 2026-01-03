@@ -35,7 +35,7 @@
                                 <div class="row">
 
                                     {{-- Nama Peserta --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="input-group input-group-outline my-3">
                                             <label class="form-label">Nama Peserta</label>
                                             <input type="text" class="form-control" name="nama_peserta"
@@ -44,7 +44,7 @@
                                     </div>
 
                                     {{-- Nomor Identitas --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="input-group input-group-outline my-3">
                                             <label class="form-label">Nomor Identitas</label>
                                             <input type="text" class="form-control" name="nomor_identitas"
@@ -52,17 +52,17 @@
                                         </div>
                                     </div>
 
-                                    {{-- Tanggal Diterima --}}
-                                    {{-- <div class="col-md-6">
-                                        <div class="input-group input-group-static my-3">
-                                            <label>Tanggal Berkas Diterima CSO</label>
-                                            <input type="date" class="form-control" name="tgl_berkas_diterima_cso"
-                                                value="{{ $berkasKlaim->tgl_berkas_diterima_cso ?? '' }}">
+                                    {{-- Nama Pengaju --}}
+                                    <div class="col-md-6">
+                                        <div class="input-group input-group-outline my-3">
+                                            <label class="form-label">Nama Pengaju</label>
+                                            <input type="text" class="form-control" name="nama_pengaju"
+                                                value="{{ $berkasKlaim->nama_pengaju ?? '' }}">
                                         </div>
-                                    </div> --}}
+                                    </div>
 
                                     {{-- Tanggal Diterima --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="input-group input-group-outline my-3">
                                             <label class="form-label">Tanggal Berkas Diterima CSO</label>
                                             <input type="text" class="form-control datepicker"
@@ -201,7 +201,7 @@
                                     </div>
 
                                     {{-- Catatan --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="input-group input-group-static my-3">
                                             <label>Catatan Konfirmasi</label>
                                             <textarea class="form-control" name="catatan_konfirmasi" rows="3">{{ $berkasKlaim->catatan_konfirmasi ?? '' }}</textarea>
@@ -209,16 +209,7 @@
                                     </div>
 
                                     {{-- Selesai Konfirmasi --}}
-                                    {{-- <div class="col-md-6">
-                                        <div class="input-group input-group-static my-3">
-                                            <label>Tanggal Selesai Konfirmasi</label>
-                                            <input type="date" class="form-control" name="selesai_konfirmasi"
-                                                value="{{ $berkasKlaim->selesai_konfirmasi ?? '' }}">
-                                        </div>
-                                    </div> --}}
-
-                                    {{-- Selesai Konfirmasi --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="input-group input-group-outline my-3">
                                             <label class="form-label">Tanggal Selesai Konfirmasi</label>
                                             <input type="text" class="form-control datepicker"
@@ -227,10 +218,19 @@
                                         </div>
                                     </div>
 
+                                    {{-- Nomor Loket --}}
+                                    <div class="col-md-4">
+                                        <div class="input-group input-group-outline my-3">
+                                            <label class="form-label">Nomor Loket</label>
+                                            <input type="number" class="form-control" name="no_loket"
+                                                value="{{ $berkasKlaim->no_loket ?? '' }}">
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <button type="submit" class="btn bg-gradient-primary mt-4">Save</button>
-                                <button type="button" id="btnReset" class="btn btn-secondary mt-4">Reset</button>
+                                <button type="submit" class="btn bg-gradient-primary mt-4">Simpan</button>
+                                <button type="button" id="btnReset" class="btn btn-secondary mt-4">Ulang</button>
 
                             </form>
 

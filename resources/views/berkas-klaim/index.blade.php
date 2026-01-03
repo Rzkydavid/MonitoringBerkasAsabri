@@ -22,14 +22,13 @@
                                     <div class="d-flex align-items-center me-3" style="gap: 8px;">
                                         <a href="{{ route('berkas-klaim.create') }}"
                                             class="btn btn-sm btn-light text-primary">
-                                            + Add Berkas Klaim
+                                            Tambah Berkas Klaim
                                         </a>
 
                                         <button id="deleteSelected" class="btn btn-sm text-white"
                                             style="background-color:#e53935;">
-                                            <i class="material-icons"
-                                                style="font-size:16px; vertical-align:middle;">delete</i>
-                                            <span style="vertical-align:middle;">Delete Selected</span>
+                                            <i class="material-icons" style="font-size:5px; vertical-align:middle;"></i>
+                                            <span style="vertical-align:middle;">Hapus</span>
                                         </button>
                                     </div>
                                 @endif
@@ -70,13 +69,14 @@
 
                                             <th>Catatan Konfirmasi</th>
                                             <th>Selesai Konfirmasi</th>
+                                            <th>No. Loket</th>
 
                                             <!-- status_berkas relation -->
                                             <th>Status Terkini</th>
                                             <th>Langkah Selanjutnya</th>
 
-                                            <th>Created By</th>
-                                            <th>Action</th>
+                                            <th>Dibuat oleh</th>
+                                            <th>Tindakan</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -172,6 +172,10 @@
                 {
                     data: 'selesai_konfirmasi',
                     name: 'selesai_konfirmasi'
+                },
+                {
+                    data: 'no_loket',
+                    name: 'no_loket'
                 },
 
                 // status_berkas relation fields

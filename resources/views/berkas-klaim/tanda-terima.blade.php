@@ -76,10 +76,11 @@
             </td>
             <td style="width:50%; text-align:right;">
                 <div class="header-box">
-                    <strong>PT ASABRI (PERSERO)</strong><br>
+                    <strong>Kantor Cabang Utama PT ASABRI (Persero) Jakarta</strong><br>
                     Jl. Mayjen Sutoyo, No. 11, Jakarta 13630<br>
                     Telepon : 0812 82371518-19<br>
-                    Call Center 021-1500043
+                    Call Center Asabri 1500043<br>
+                    Call Center KCU Jakarta 082151136387 (Whatsapp)
                 </div>
             </td>
         </tr>
@@ -100,12 +101,28 @@
             <td>{{ $data->nomor_identitas }}</td>
         </tr>
         <tr>
+            <td style="width:30%;">NAMA PENGAJU</td>
+            <td style="width:2%;">:</td>
+            <td>{{ $data->nama_pengaju }}</td>
+        </tr>
+        <tr>
             <td>TANGGAL SURAT</td>
             <td>:</td>
             <td>{{ $data->tgl_berkas_diterima_cso
                 ? \Carbon\Carbon::parse($data->tgl_berkas_diterima_cso)->format('d / m / Y')
                 : '' }}
             </td>
+        </tr>
+        <tr>
+            <td>ESTIMASI SELESAI</td>
+            <td>:</td>
+            <td>{{ $data->selesai_konfirmasi ? \Carbon\Carbon::parse($data->selesai_konfirmasi)->format('d / m / Y') : '' }}
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30%;">CATATAN</td>
+            <td style="width:2%;">:</td>
+            <td>{{ $data->catatan_konfirmasi }}</td>
         </tr>
     </table>
 
@@ -131,7 +148,7 @@
         </tr>
     </table>
 
-    <!-- PERSYARATAN -->
+    {{-- <!-- PERSYARATAN -->
     <div class="section-title">PERSYARATAN:</div>
 
     <table class="checklist" style="margin-top:6px;">
@@ -161,7 +178,7 @@
                 19. {!! cb(false) !!} DPP Komputer (KU-107) Legalisir
             </td>
         </tr>
-    </table>
+    </table> --}}
 
     <!-- SIGNATURE -->
     <div style="margin-top:45px; text-align:right;">
@@ -175,7 +192,7 @@
             padding-bottom:4px;
             font-weight:bold;
         ">
-            {{ optional($data->creator)->name }}
+            Loket {{ $data->no_loket ?? '-' }}
         </span>
     </div>
 

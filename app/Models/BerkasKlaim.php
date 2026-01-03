@@ -14,6 +14,7 @@ class BerkasKlaim extends Model
     protected $fillable = [
         'nama_peserta',
         'nomor_identitas',
+        'nama_pengaju',
         'jenis_klaim_id',
         'tgl_berkas_diterima_cso',
         'status_terima_klaim_masuk',
@@ -29,6 +30,7 @@ class BerkasKlaim extends Model
 
         'catatan_konfirmasi',
         'selesai_konfirmasi',
+        'no_loket',
 
         'created_by',
         'status_berkas_id',

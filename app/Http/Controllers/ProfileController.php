@@ -13,10 +13,10 @@ class ProfileController extends Controller
 
     public function update()
     {
-            
+
         $user = request()->user();
         $attributes = request()->validate([
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'name' => 'required',
             'phone' => 'required|max:10',
             'about' => 'required:max:150',
@@ -24,7 +24,6 @@ class ProfileController extends Controller
         ]);
 
         auth()->user()->update($attributes);
-        return back()->withStatus('Profile successfully updated.');
-    
-}
+        return back()->withStatus('Profil berhasil diperbarui..');
+    }
 }

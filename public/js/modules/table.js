@@ -62,16 +62,16 @@ $(document).ready(function () {
 
         // Confirmation dialog
         Swal.fire({
-            title: `Sure want to delete ${ids.length} item(s)?`,
-            text: "This action cannot be undone.",
+            title: `Anda yakin ingin menghapus ${ids.length} item.?`,
+            text: "Tindakan ini tidak dapat dibatalkan..",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#e53935",
             cancelButtonColor: "#6c757d",
-            confirmButtonText: "Yes, delete!",
+            confirmButtonText: "Ya,Hapus!",
         }).then((result) => {
             if (result.isConfirmed) {
-                Notiflix.Loading.standard("Deleting...");
+                Notiflix.Loading.standard("Menghapus...");
 
                 $.ajax({
                     url: DELETE_URL,
@@ -106,7 +106,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: "error",
                             title: "Error",
-                            text: "Something went wrong.",
+                            text: "Terjadi kesalahan..",
                         });
                     },
                 });

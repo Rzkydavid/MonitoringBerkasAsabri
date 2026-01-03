@@ -9,24 +9,24 @@ $(document).ready(function () {
         if (ids.length === 0) {
             Swal.fire({
                 icon: "warning",
-                title: "No items selected",
-                text: "Please select items first.",
+                title: "Tidak ada yang dipilih",
+                text: "Silakan pilih terlebih dahulu..",
             });
             return;
         }
 
         // Confirmation dialog
         Swal.fire({
-            title: `Sure want to accept ${ids.length} item(s)?`,
-            text: "This action cannot be undone.",
+            title: `Apakah anda ingin terima ${ids.length} item?`,
+            text: "Tindakan ini tidak dapat dibatalkan.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#35e54cff",
             cancelButtonColor: "#6c757d",
-            confirmButtonText: "Yes, accept!",
+            confirmButtonText: "Ya,terima!",
         }).then((result) => {
             if (result.isConfirmed) {
-                Notiflix.Loading.standard("Loading...");
+                Notiflix.Loading.standard("Memuat...");
 
                 $.ajax({
                     url: ACCEPT_URL,
@@ -61,7 +61,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: "error",
                             title: "Error",
-                            text: "Something went wrong.",
+                            text: "Terjadi kesalahan.",
                         });
                     },
                 });
@@ -87,8 +87,8 @@ $(document).ready(function () {
 
         // Confirmation dialog
         Swal.fire({
-            title: `Sure want to reject ${ids.length} item(s)?`,
-            text: "This action cannot be undone.",
+            title: `Apakah anda ingin menolak ${ids.length} item.)?`,
+            text: "Tindakan ini tidak dapat dibatalkan.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#e53935",
@@ -96,7 +96,7 @@ $(document).ready(function () {
             confirmButtonText: "Yes, reject!",
         }).then((result) => {
             if (result.isConfirmed) {
-                Notiflix.Loading.standard("Loading...");
+                Notiflix.Loading.standard("Memuat...");
 
                 $.ajax({
                     url: REJECT_URL,
@@ -155,16 +155,16 @@ $(document).ready(function () {
         let confirmButtonColor = action === "reject" ? "#e53935" : "#35e54cff";
 
         Swal.fire({
-            title: `Sure want to ${action} this klaim?`,
-            text: "This action cannot be undone.",
+            title: `Apakah anda ingin ${action} klaim ini?`,
+            text: "Tindakan ini tidak dapat dibatalkan.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: confirmButtonColor,
             cancelButtonColor: "#6c757d",
-            confirmButtonText: `Yes, ${action}!`,
+            confirmButtonText: `Ya, ${action}!`,
         }).then((result) => {
             if (result.isConfirmed) {
-                Notiflix.Loading.standard("Loading...");
+                Notiflix.Loading.standard("Memuat...");
 
                 $.ajax({
                     url: url,

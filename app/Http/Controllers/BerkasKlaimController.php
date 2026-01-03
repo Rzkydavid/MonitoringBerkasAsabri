@@ -149,6 +149,7 @@ class BerkasKlaimController extends Controller
                         ? \Carbon\Carbon::parse($row->selesai_konfirmasi)->format('d M Y')
                         : '-'
                 )
+                ->addColumn('no_loket', fn($row) => $row->no_loket)
 
                 ->addColumn('action', function ($row) {
                     $encodedId = base64_encode($row->id);
@@ -212,7 +213,7 @@ class BerkasKlaimController extends Controller
         if (!is_array($ids) || count($ids) === 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'No items selected.',
+                'message' => 'Tidak ada berkas yang dipilih.',
             ], 400);
         }
 
@@ -223,12 +224,12 @@ class BerkasKlaimController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => count($ids) . ' item(s) deleted successfully.',
+                'message' => count($ids) . ' Item berhasil dihapus.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Delete failed: ' . $e->getMessage(),
+                'message' => 'Gagal Hapus: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -246,6 +247,7 @@ class BerkasKlaimController extends Controller
         $request->validate([
             'nama_peserta'             => 'required|string|max:255',
             'nomor_identitas'          => 'required|string|max:255',
+            'nama_pengaju'             => 'required|string|max:255',
             'jenis_klaim_id'           => 'required|integer',
             'tgl_berkas_diterima_cso'  => 'required|date',
             'status_terima_klaim_masuk' => 'required|in:Datang Langsung,ASABRI Link,Klaim Online,Email,Lainnya',
@@ -258,6 +260,9 @@ class BerkasKlaimController extends Controller
             'nomor_wa_pengaju' => 'required|in:Tercantum,Tidak Tercantum',
             'nomor_rekening_pengaju' => 'required|in:Aktif,Tidak Aktif',
             'perlu_konfirmasi_ulang' => 'required|in:Ya,Tidak',
+
+            'selesai_konfirmasi'  => 'required|date',
+            'no_loket' => 'required|integer|min:1|max:32767',
         ]);
 
         // take only validated data
@@ -278,7 +283,7 @@ class BerkasKlaimController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Berkas klaim created successfully'
+            'message' => 'Berkas klaim berhasil dibuat'
         ]);
     }
 
@@ -296,8 +301,9 @@ class BerkasKlaimController extends Controller
         $berkasKlaim = BerkasKlaim::findOrFail($id);
 
         $request->validate([
-            'nama_peserta'                      => 'required|string|max:255',
+            'nama_peserta'             => 'required|string|max:255',
             'nomor_identitas'          => 'required|string|max:255',
+            'nama_pengaju'             => 'required|string|max:255',
             'jenis_klaim_id'           => 'required|integer',
             'tgl_berkas_diterima_cso'  => 'required|date',
             'status_terima_klaim_masuk' => 'required|in:Datang Langsung,ASABRI Link,Klaim Online,Email,Lainnya',
@@ -310,20 +316,23 @@ class BerkasKlaimController extends Controller
             'nomor_wa_pengaju' => 'required|in:Tercantum,Tidak Tercantum',
             'nomor_rekening_pengaju' => 'required|in:Aktif,Tidak Aktif',
             'perlu_konfirmasi_ulang' => 'required|in:Ya,Tidak',
+
+            'selesai_konfirmasi'  => 'required|date',
+            'no_loket' => 'required|integer|min:1|max:32767',
         ]);
 
         $berkasKlaim->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Berkas klaim updated successfully'
+            'message' => 'Berkas Klaim berhasil diperbarui'
         ]);
     }
 
     public function destroy(BerkasKlaim $berkasKlaim)
     {
         $berkasKlaim->delete();
-        return back()->with('success', 'Berkas klaim deleted');
+        return back()->with('success', 'Berkas klaim dihapus');
     }
 
     public function pendingTaskIndex()
@@ -524,7 +533,7 @@ class BerkasKlaimController extends Controller
                         $btn .= '
                             <button class="btn btn-sm btn-success btn-action"
                                 data-id="' . $id . '"
-                                data-action="accept">
+                                data-action="terima">
                                 <i class="material-icons" style="font-size:16px;">check_circle</i> Terima
                             </button>
                         ';
@@ -538,7 +547,7 @@ class BerkasKlaimController extends Controller
                         $btn .= '
                             <button class="btn btn-sm btn-info btn-action"
                                 data-id="' . $id . '"
-                                data-action="finish">
+                                data-action="selesai">
                                 <i class="material-icons" style="font-size:16px;">task_alt</i> Selesai
                             </button>
                         ';
@@ -552,7 +561,7 @@ class BerkasKlaimController extends Controller
                         $btn .= '
                             <button class="btn btn-sm btn-info btn-action"
                                 data-id="' . $id . '"
-                                data-action="finish">
+                                data-action="selesai">
                                 <i class="material-icons" style="font-size:16px;">task_alt</i> Selesai
                             </button>
 
@@ -589,7 +598,7 @@ class BerkasKlaimController extends Controller
         if (!is_array($ids) || count($ids) === 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'No items selected.',
+                'message' => 'Tidak ada item yang dipilih.',
             ], 400);
         }
 
@@ -671,14 +680,14 @@ class BerkasKlaimController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Selected berkas successfully accepted.',
+                'message' => 'Berkas terpilih berhasil diterima.',
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to accept berkas.',
+                'message' => 'Gagal Menerima Berkas.',
                 'error'   => $e->getMessage(),
             ], 500);
         }
@@ -691,7 +700,7 @@ class BerkasKlaimController extends Controller
         if (!is_array($ids) || count($ids) === 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'No items selected.',
+                'message' => 'Tidak ada item yang dipilih.',
             ], 400);
         }
 
@@ -741,14 +750,14 @@ class BerkasKlaimController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Selected berkas successfully rejected.',
+                'message' => 'Berkas terpilih berhasil ditolak.',
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to reject berkas.',
+                'message' => 'Gagal menolak berkas.',
                 'error'   => $e->getMessage(),
             ], 500);
         }

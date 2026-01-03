@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'Administrator',
-                'nip' => '19870.912001',
-                'password' => Hash::make('admin123'),
+                'nip' => '19870.912002',
+                'password' => Hash::make('admin1234'),
                 'job_title' => 'System Administrator',
                 'email' => 'admin@example.com',
                 'phone' => '081234567890',
